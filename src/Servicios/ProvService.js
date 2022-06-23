@@ -17,7 +17,7 @@ class ProvService{
         return axios.put(PROV_API + '/' + provId, prov);
     }
 
-    deleteEmployee(provId){
+    deleteProv(provId){
         return axios.delete(PROV_API + '/' + provId);
     }
 }
