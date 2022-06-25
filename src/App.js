@@ -21,7 +21,7 @@ function App() {
   <NavBar/>
 
      <Routes>
-       <Route path="/" ></Route>
+        <Route path="/" element={<Principal />}></Route>
       
        <Route path="/add-subcat" element={<CreateSubCatComp/>}></Route>
        <Route path="/add-prov" element={<CreateProvComp/>}></Route>
