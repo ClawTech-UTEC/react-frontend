@@ -14,20 +14,32 @@ import { Create } from '@material-ui/icons';
 import CreateSubCatComp from './Components/CreateSubCatComp';
 import CreateCategoriaComp from './Components/CreateCategoriaComp';
 import RecepcionesTable from './Components/RecepcionesTable';
+import CreateRecepcion from './Components/CreateRecepcion';
+import Login from './Components/Login';
+import { useJwt } from "react-jwt";
 
 
 function App() {
+
+
+  const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
+
   return (
     <BrowserRouter>
-      <NavBar />
+
+
+
+      {isExpired ? <div /> : <NavBar />}
 
       <Routes>
-        <Route path="/" element={<Principal />}></Route>
+        <Route path="/" element={isExpired ? <Login /> : <Principal />}></Route>
 
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
         <Route path="/add-prov" element={<CreateProvComp />}></Route>
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
         <Route path="/recepciones" element={<RecepcionesTable />}></Route>
+        <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
+
 
 
       </Routes>

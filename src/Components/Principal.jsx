@@ -29,7 +29,7 @@ function Principal() {
             cargarReporteRecepcion(response.data);
         });
 
-        tipoProductoService.getReporteRecepcionesAnual(2022).then(response => {
+        tipoProductoService.getProductosMasVendidos(2022).then(response => {
             console.log(response.data);
             cargarReporteProductosMasVendidos(response.data);
         });

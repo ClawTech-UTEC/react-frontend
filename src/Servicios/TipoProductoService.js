@@ -5,7 +5,7 @@ const tipoProductoService = {
 
 
 
-    getReporteRecepcionesAnual: (year) => {
+    getProductosMasVendidos: (year) => {
         return axios.get(
             `${apiBaseUrl}/tipoProductos/masVendidos/${year}`,
             {
@@ -16,7 +16,21 @@ const tipoProductoService = {
         ).then(response => response);
 
 
+    },
+    getProductosByProvedor: (idProv) => {
+        return axios.post(
+            `${apiBaseUrl}/tipoProductos/prov/?idProv=${idProv}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
+
+
     }
+
+
 }
 
 

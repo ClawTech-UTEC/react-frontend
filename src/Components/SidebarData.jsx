@@ -50,5 +50,7 @@ export const SidebarData = [
     path: '/support',
     icon: <FaIcons.FaWarehouse />,
     cName: 'nav-text'
-  }
+  },
+
+   
 ];

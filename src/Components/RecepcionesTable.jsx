@@ -16,6 +16,7 @@ import moment from 'moment';
 import { Button, Grid } from '@material-ui/core';
 import SearchBar from "material-ui-search-bar";
 
+import { Link } from "react-router-dom";
 
 
 
@@ -88,7 +89,10 @@ export default function RecepcionesTable() {
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <Button variant="contained" color="primary" align="center">Crear Nueva Recepcion</Button>
+                    <Link to="/crearRecepcion">
+                        <Button variant="contained" color="primary" align="center">Crear Nueva Recepcion</Button>
+                    </Link>
+                    
                 </Grid>
                 <Grid item xs={12}>
 

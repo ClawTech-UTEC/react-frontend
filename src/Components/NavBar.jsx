@@ -10,20 +10,28 @@ function Navbar() {
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
-
+  const logout = () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('email');
+    localStorage.removeItem('idUsuario');
+    window.location.reload(false);
+  }
   return (
     <>
-    
       <IconContext.Provider value={{ color: '#fff' }}>
-     
         <div className='navbar'>
-        
           <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
           <div className='titulo'>
-          <p>IlogApp</p>
+            <p>IlogApp</p>
           </div>
+
+          <Link to='/' className="menu-bars botonSalir">
+            <FaIcons.FaRegArrowAltCircleRight icon="fa-thin fa-arrow-right-from-bracket"
+              onClick={logout}
+            />
+          </Link>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>

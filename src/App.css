@@ -49,6 +49,20 @@
   
 }
 
+.loginTitle{
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+}
+
+.imageLogo{
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  color: white;
+  max-height: 30VH;
+}
+
 .background{
   background-color: #e57373;
   min-width: 100%;
@@ -57,3 +71,20 @@
   justify-content: center;
   padding: 50px;
 }
+
+.centeredDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.errorMessage{
+  color: red;
+  text-align: center;
+}
+
+.botonSalir{
+  margin: 20px;
+  text-align: right;
+  color: white;
+}	
