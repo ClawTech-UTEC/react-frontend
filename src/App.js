@@ -13,25 +13,26 @@ import CreateProvComp from './Components/CreateProvComp';
 import { Create } from '@material-ui/icons';
 import CreateSubCatComp from './Components/CreateSubCatComp';
 import CreateCategoriaComp from './Components/CreateCategoriaComp';
+import RecepcionesTable from './Components/RecepcionesTable';
 
 
 function App() {
   return (
     <BrowserRouter>
-  <NavBar/>
+      <NavBar />
 
-     <Routes>
+      <Routes>
         <Route path="/" element={<Principal />}></Route>
-      
-       <Route path="/add-subcat" element={<CreateSubCatComp/>}></Route>
-       <Route path="/add-prov" element={<CreateProvComp/>}></Route>
-       <Route path="/add-cat" element={<CreateCategoriaComp/>}></Route>
-     
-      
-       
-     </Routes>
-        
-        
+
+        <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
+        <Route path="/add-prov" element={<CreateProvComp />}></Route>
+        <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
+        <Route path="/recepciones" element={<RecepcionesTable />}></Route>
+
+
+      </Routes>
+
+
 
     </BrowserRouter>
   );

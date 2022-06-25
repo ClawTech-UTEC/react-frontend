@@ -16,6 +16,46 @@ const recepcionService = {
         ).then(response => response);
 
 
+    },
+
+       createRec: (recepcion, usuario) => {
+        return axios.post(
+            `${apiBaseUrl}/recepcion/}`,
+
+
+            {
+
+                data: {
+                    recepcion: recepcion, usuario: usuario
+                },
+
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
+
+
+    },
+
+
+
+    getRecepciones: () => {
+        return axios.get(
+            `${apiBaseUrl}/recepcion/`,
+
+
+            {
+
+
+
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
+
+
     }
 }
 

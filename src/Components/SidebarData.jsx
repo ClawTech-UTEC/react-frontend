@@ -12,6 +12,16 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
+    title: 'Recepciones',
+    path: '/recepciones',
+    icon: <FaIcons.FaWarehouse />,
+    cName: 'nav-text'
+  },
+
+
+
+
+  {
     title: 'Proveedores',
     path: '/add-prov',
     icon: <FaIcons.FaUserTie />,

@@ -51,7 +51,8 @@
 
 .background{
   background-color: #e57373;
- 
+  min-width: 100%;
+  min-height: 95vh;
   display: flex;
   justify-content: center;
   padding: 50px;

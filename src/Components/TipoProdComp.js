@@ -109,7 +109,7 @@ function TipoProdSelectComp(){
       }
     
       const seleccionartipoProd=(tipoProd, caso)=>{
-        settipoProdSeleccionado(tipoProd);
+        setTipoProdSelectSelect(tipoProd);
         (caso==='Editar')?abrirCerrarModalEditar():abrirCerrarModalEliminar()
       }
       const searcher =(e)=>{
