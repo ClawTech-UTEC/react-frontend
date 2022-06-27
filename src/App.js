@@ -17,6 +17,7 @@ import RecepcionesTable from './Components/RecepcionesTable';
 import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
 import { useJwt } from "react-jwt";
+import DetalleRecepcion from './Components/DetalleRecepcion';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
         <Route path="/recepciones" element={<RecepcionesTable />}></Route>
         <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
+        <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
 
 
 

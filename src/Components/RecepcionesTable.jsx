@@ -18,14 +18,16 @@ import SearchBar from "material-ui-search-bar";
 
 import { Link } from "react-router-dom";
 
+import { useNavigate } from 'react-router-dom';
 
 
 
 
-export default function RecepcionesTable() {
+export default function RecepcionesTable(props) {
 
     const [recepciones, setRecepciones] = useState([]);
     const [filteredRecepciones, setfilteredRecepciones] = useState([]);
+    const navigate = useNavigate();
 
     const [searched, setSearched] = useState("");
 
@@ -110,6 +112,10 @@ export default function RecepcionesTable() {
                             <TableBody>
                                 {filteredRecepciones.map((recepcion) => (
                                     <TableRow
+                                        onClick={() => navigate('/detalleRecepcion', {
+                                            state: recepcion // your data array of objects
+                                        })}
+
                                         key={recepcion.idRecepcion}
                                         sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                     >
@@ -119,7 +125,7 @@ export default function RecepcionesTable() {
                                         <TableCell align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado}</TableCell>
                                         <TableCell align="center">{recepcion.estadoRecepcion[0].usuario.nombre}</TableCell>
 
-                                        <TableCell align="center">{moment(Date(recepcion.fechaRecepcion)).format('d MMMM YYYY')}</TableCell>
+                                        <TableCell align="center">{moment(new Date(recepcion.fechaRecepcion)).format('D/M/YY')}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

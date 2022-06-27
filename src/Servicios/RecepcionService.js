@@ -6,7 +6,7 @@ const recepcionService = {
 
 
     getReporteRecepcionesAnual: (year) => {
-       return  axios.get(
+        return axios.get(
             `${apiBaseUrl}/recepcion/reporte/${year}`,
             {
                 headers: {
@@ -18,7 +18,7 @@ const recepcionService = {
 
     },
 
-       createRec: (recepcion, usuario) => {
+    createRec: (recepcion, usuario) => {
         return axios.post(
             `${apiBaseUrl}/recepcion/}`,
 
@@ -56,6 +56,21 @@ const recepcionService = {
         ).then(response => response);
 
 
+    },
+
+
+    crearRecepcion: (recepcion) => {
+        return axios.post(
+            `${apiBaseUrl}/recepcion/`,
+
+            recepcion,
+            {
+
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
     }
 }
 

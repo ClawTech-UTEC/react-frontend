@@ -2,6 +2,11 @@ import axios from "axios";
 import { apiBaseUrl } from "../constants/constants";
 
 
+/**
+ * @author ClawTech 
+ * @version 1.0
+ * @description Servicio para el manejo de los usuarios
+ */
 
 
 
@@ -9,15 +14,18 @@ import { apiBaseUrl } from "../constants/constants";
 const usuarioService = {
 
 
-    login: (email, password, errorFunction) => {
-        // var bodyFormData = new FormData();
-        // bodyFormData.append('email', email);
-        // bodyFormData.append('password', email);
-        var loginRequest = new Object();
+    /**
+    @param {string} email 
+    @param {string} password
+    @param {function} setError accion a realizar en case de un error
+    @returns {Promise} retorna una promesa con el resultado de la peticion
+    @description Metodo para hacer el login de un usuario
 
+    */
+    login: (email, password, errorFunction) => {
+        var loginRequest = new Object();
         loginRequest.email = email;
         loginRequest.password = password;
-
         axios.post(
             apiBaseUrl + "/login", loginRequest, {
             headers: {
@@ -36,6 +44,40 @@ const usuarioService = {
             console.log(error);
             if (error.response.status === 401 || error.response.status === 403) {
                 errorFunction("Email o password incorrectos");
+            } else if (error.response.status === 500) {
+                errorFunction("No se pudo conectar con el servidor");
+            } else {
+                errorFunction("Error desconocido");
+            }
+        });
+    },
+
+
+
+    registrarse: (email, password, nombre, apellido, errorFunction, volverAlLogin) => {
+        console.log(email, password, nombre, apellido);
+        let formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('nombre', nombre);
+        formData.append('apellido', apellido);
+        axios.post(
+            apiBaseUrl + "/register", formData, { 
+               
+                'Content-Type': 'multipart/form-data'
+
+
+            }
+        ).then(response => {
+            if (response.status === 200) {
+
+                window.location.replace("http://localhost:3000/");
+                volverAlLogin();
+            }
+        }).catch(error => {
+            console.log(error);
+            if (error.response.status === 400) {
+                errorFunction("Email ya existe");
             } else if (error.response.status === 500) {
                 errorFunction("No se pudo conectar con el servidor");
             } else {
