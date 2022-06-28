@@ -10,11 +10,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import recepcionService from '../Servicios/RecepcionService';
 import ConfirmationDiolog from './ConfirmationDiolog';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 
 
 export default function CreateRecepcion() {
+    const navigate = useNavigate();
+    let location = useLocation();
     const validationSchema = yup.object({
         cantidad: yup
             .string('Cantidad')
@@ -84,7 +87,7 @@ export default function CreateRecepcion() {
 
         var indiceSiYaExiste = productosAgregados.indexOf(productosAgregados.find(object => object.producto === tipoProducto));
 
-        if (indiceSiYaExiste != -1) {
+        if (indiceSiYaExiste !== -1) {
 
             productosAgregados[indiceSiYaExiste] = {
                 producto: tipoProducto,
@@ -103,7 +106,6 @@ export default function CreateRecepcion() {
     }
 
     const onCrearRecepcion= () => {
-
 
 
         const recepcion = {
@@ -126,8 +128,10 @@ export default function CreateRecepcion() {
 
         recepcionService.crearRecepcion(recepcion).then(response => {
             console.log(response.data);
+            navigate('/detalleRecepcion', {
+                state: response.data // your data array of objects
+            });
             setOpenConfirmation(false);
-            
         });
 
     }
@@ -136,7 +140,7 @@ export default function CreateRecepcion() {
         <div className='background'>
             <Grid container>
                 <Grid item xs={false} md={1}>
-
+ 
                 </Grid>
                 <Grid item xs={10} md={5}>
                     <Paper >
@@ -165,8 +169,6 @@ export default function CreateRecepcion() {
                                 error={formik.touched.tipoProducto && Boolean(formik.errors.tipoProducto)}
                                 renderInput={(params) => <TextField {...params} label="Productos" />}
                             />
-
-                         
                             <TextField
                                 fullWidth
                                 id="cantidad"

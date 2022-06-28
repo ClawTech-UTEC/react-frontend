@@ -71,6 +71,24 @@ const recepcionService = {
                 }
             },
         ).then(response => response);
+    },
+
+    controllarRecepcion: (idRecepcion, productos, idUsuaurio, controlarDiferencias) => {
+        const controlarRecepcionRequest = {};
+        controlarRecepcionRequest["idRecepcion"] = idRecepcion;
+        controlarRecepcionRequest["productosRecibidos"] = productos;
+        controlarRecepcionRequest["idUsuario"] = idUsuaurio;
+        controlarRecepcionRequest["controlarDiferencias"] = false;
+        return axios.post(
+            `${apiBaseUrl}/recepcion/controlar`,
+            controlarRecepcionRequest,
+            {
+               
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
     }
 }
 

@@ -71,8 +71,8 @@ const Registrarse = (props) => {
                             <TextField
                                 fullWidth
                                 id="email"
-                                
-                                lname="email"abel="Email"
+                                name="email"
+                                label="Email"
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 error={formik.touched.email && Boolean(formik.errors.email)}

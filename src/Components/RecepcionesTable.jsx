@@ -24,53 +24,29 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function RecepcionesTable(props) {
-
     const [recepciones, setRecepciones] = useState([]);
     const [filteredRecepciones, setfilteredRecepciones] = useState([]);
     const navigate = useNavigate();
-
     const [searched, setSearched] = useState("");
-
-
-
     const requestSearch = (searchedVal) => {
-
         const filteredRows = recepciones.filter((row) => {
             return row.idRecepcion.toString().toLowerCase().includes(searchedVal.toLowerCase()) ||
-            
                 row.recepcion.provedor.nombreProv.toLowerCase().includes(searchedVal.toLowerCase()) ||
-
                 row.estadoRecepcion[row.estadoRecepcion.length - 1].tipoEstado.toLowerCase().includes(searchedVal.toLowerCase()) ||
-
                 row.estadoRecepcion[0].usuario.nombre.toString().toLowerCase().includes(searchedVal.toLowerCase()) 
                 ;
         });
         console.log(searchedVal);
-
         setfilteredRecepciones(filteredRows);
     };
-
-
     useEffect(() => {
         let ignore = false;
-
         recepcionService.getRecepciones().then(response => {
-
             console.log(response.data);
             cargarRecepciones(response.data);
-
         });
-
-
-
-
         return () => { ignore = true; }
-
-
-
-
     }, []);
-
     const cargarRecepciones = (recepciones) => {
         setRecepciones(recepciones)
          setfilteredRecepciones(recepciones)
@@ -79,7 +55,6 @@ export default function RecepcionesTable(props) {
         setSearched("");
         requestSearch(searched);
     };
-
     return (
         <div className='background'>
             <Grid container spacing={3}>
@@ -119,12 +94,10 @@ export default function RecepcionesTable(props) {
                                         key={recepcion.idRecepcion}
                                         sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                     >
-
                                         <TableCell align="center">{recepcion.idRecepcion}</TableCell>
                                         <TableCell align="center">{recepcion.provedor.nombreProv}</TableCell>
                                         <TableCell align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado}</TableCell>
                                         <TableCell align="center">{recepcion.estadoRecepcion[0].usuario.nombre}</TableCell>
-
                                         <TableCell align="center">{moment(new Date(recepcion.fechaRecepcion)).format('D/M/YY')}</TableCell>
                                     </TableRow>
                                 ))}

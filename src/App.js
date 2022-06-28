@@ -18,6 +18,7 @@ import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
 import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
+import ControlarRecepcion from './Components/ControlarRecepcion';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/recepciones" element={<RecepcionesTable />}></Route>
         <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
         <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
+        <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
 
 
 
