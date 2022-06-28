@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, Grid, Input, InputLabel, Paper, Select, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Box } from '@material-ui/core'
+import { FormControl, FormHelperText, Grid, Input, InputLabel, Paper, Select, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Box, Typography, Container } from '@material-ui/core'
 import { Autocomplete } from '@mui/material';
 import React, { PureComponent } from 'react'
 
@@ -11,9 +11,7 @@ import * as yup from 'yup';
 import recepcionService from '../Servicios/RecepcionService';
 import ConfirmationDiolog from './ConfirmationDiolog';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
-
+import InformationDiolog from './InformationDiolog';
 
 export default function CreateRecepcion() {
     const navigate = useNavigate();
@@ -81,14 +79,11 @@ export default function CreateRecepcion() {
         if (provedor === undefined || provedor === null || tipoProducto === undefined || tipoProducto === null) {
             setErrorAgregarProductos("Debes seleccionar un proveedor y un tipo de producto");
             return;
-        }else{
+        } else {
             setErrorAgregarProductos("");
         }
-
         var indiceSiYaExiste = productosAgregados.indexOf(productosAgregados.find(object => object.producto === tipoProducto));
-
         if (indiceSiYaExiste !== -1) {
-
             productosAgregados[indiceSiYaExiste] = {
                 producto: tipoProducto,
                 cantidad: productosAgregados[indiceSiYaExiste].cantidad + cantidad
@@ -100,22 +95,15 @@ export default function CreateRecepcion() {
             producto: tipoProducto,
             cantidad: cantidad
         }
-
         setProductosAgregados([...productosAgregados, nuevoProductoAgregadp]);
         console.log(productosAgregados);
     }
-
-    const onCrearRecepcion= () => {
-
-
+    const onCrearRecepcion = () => {
         const recepcion = {
-
             fechaRecepcion: new Date(),
-            provedor : provedor,
-
-            productos:productosAgregados,
-            
-            estadoRecepcion:[{
+            provedor: provedor,
+            productos: productosAgregados,
+            estadoRecepcion: [{
                 tipoEstado: "PENDIENTE",
                 fecha: new Date(),
                 usuario: {
@@ -123,7 +111,6 @@ export default function CreateRecepcion() {
                 }
             }]
         }
-
         recepcionService.crearRecepcion(recepcion).then(response => {
             console.log(response.data);
             navigate('/detalleRecepcion', {
@@ -136,99 +123,108 @@ export default function CreateRecepcion() {
 
     return (
         <div className='background'>
-            <Grid container>
-                <Grid item xs={false} md={1}>
- 
-                </Grid>
-                <Grid item xs={10} md={5}>
-                    <Paper >
-                        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                id="combo-box-demo"
-                                options={proveedores}
-                                onChange={handleChangeProveedor}
-                                getOptionLabel={(option) => option.nombreProv || ""}
+            <Container fixed>
+
+                <Grid container spacing={2}>
+
+                    <Grid item xs={12}>
+                        <Typography variant='h5' className='titulo1' >
+                            Crear Recepcion
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs={false} md={1}>
+
+                    </Grid>
+                    <Grid item xs={10} md={5}>
+                        <Paper container className='formPaperContainer' >
+                            <Box component="form" noValidate onSubmit={formik.handleSubmit}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={proveedores}
+                                    onChange={handleChangeProveedor}
+                                    getOptionLabel={(option) => option.nombreProv || ""}
 
 
-                                error={formik.touched.provededor && Boolean(formik.errors.provededor)}
+                                    error={formik.touched.provededor && Boolean(formik.errors.provededor)}
 
 
-                                renderInput={(params) => <TextField {...params} label="Proveedor" />}
-                            />
-                            <Autocomplete
-                                fullWidth
-                                disablePortal
-                                id="combo-box-producto"
-                                options={tiposProductos}
-                                onChange={onProductoChange}
-                                getOptionLabel={(option) => option.nombre + " " + option.codigoDeBarras}
-                                error={formik.touched.tipoProducto && Boolean(formik.errors.tipoProducto)}
-                                renderInput={(params) => <TextField {...params} label="Productos" />}
-                            />
-                            <TextField
-                                fullWidth
-                                id="cantidad"
-                                name="cantidad"
-                                label="Cantidad"
-                                type="number"
-                                value={formik.values.cantidad}
-                                onChange={formik.handleChange}
-                                error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
-                                helperText={formik.touched.cantidad && formik.errors.cantidad}
-                            />
-                            <Button color="primary" align="center" type="submit">
-                                Agregar Prodcuto
-                            </Button>
-                            <p align="center" >
-                                {errorAgregarProductos}
-                            </p>
-                        </Box>
-                    </Paper>
-                </Grid>
-                <Grid item xs={false} md={1}>
+                                    renderInput={(params) => <TextField {...params} label="Proveedor" />}
+                                />
+                                <Autocomplete
+                                    fullWidth
+                                    disablePortal
+                                    id="combo-box-producto"
+                                    options={tiposProductos}
+                                    onChange={onProductoChange}
+                                    getOptionLabel={(option) => option.nombre + " " + option.codigoDeBarras}
+                                    error={formik.touched.tipoProducto && Boolean(formik.errors.tipoProducto)}
+                                    renderInput={(params) => <TextField {...params} label="Productos" />}
+                                />
+                                <TextField
+                                    fullWidth
+                                    id="cantidad"
+                                    name="cantidad"
+                                    label="Cantidad"
+                                    type="number"
+                                    value={formik.values.cantidad}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
+                                    helperText={formik.touched.cantidad && formik.errors.cantidad}
+                                />
+                                <Button color="primary" align="center" type="submit">
+                                    Agregar Prodcuto
+                                </Button>
+                                <p align="center" >
+                                    {errorAgregarProductos}
+                                </p>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={false} md={1}>
 
-                </Grid>
-                <Grid item xs={10} md={5}>
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center">Id Producto</TableCell>
-                                    <TableCell align="center">Nombre</TableCell>
-                                    <TableCell align="center">Codigo de Barras</TableCell>
-                                    <TableCell align="center">Precio</TableCell>
-                                    <TableCell align="center">Cantidad</TableCell>
-
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {productosAgregados.map((producto) => (
-                                    <TableRow
-                                        key={producto.producto.idTipoProd}
-                                        sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
-                                    >
-
-                                        <TableCell align="center">{producto.producto.nombre}</TableCell>
-                                        <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
-                                        <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
-                                        <TableCell align="center">${producto.producto.precio}</TableCell>
-                                        <TableCell align="center">{producto.cantidad}</TableCell>
+                    </Grid>
+                    <Grid item xs={10} md={5}>
+                        <TableContainer component={Paper} className='formPaperContainer'>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">Id Producto</TableCell>
+                                        <TableCell align="center">Nombre</TableCell>
+                                        <TableCell align="center">Codigo de Barras</TableCell>
+                                        <TableCell align="center">Precio</TableCell>
+                                        <TableCell align="center">Cantidad</TableCell>
 
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                        <Button color="primary" align="rigth" onClick={()=>setOpenConfirmation(true)}>
-                            Crear Recepcion
-                        </Button>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {productosAgregados.map((producto) => (
+                                        <TableRow
+                                            key={producto.producto.idTipoProd}
+                                            sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
+                                        >
 
+                                            <TableCell align="center">{producto.producto.nombre}</TableCell>
+                                            <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
+                                            <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
+                                            <TableCell align="center">${producto.producto.precio}</TableCell>
+                                            <TableCell align="center">{producto.cantidad}</TableCell>
+
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            <Button color="primary" align="rigth" onClick={() => setOpenConfirmation(true)}>
+                                Crear Recepcion
+                            </Button>
+                        </TableContainer>
+                    </Grid>
                 </Grid>
-            </Grid>
+                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() =>
+                    (false)} onAccept={() => onCrearRecepcion} ></ConfirmationDiolog>
 
-            <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onCrearRecepcion} ></ConfirmationDiolog>
+            </Container>
         </div>
     )
 

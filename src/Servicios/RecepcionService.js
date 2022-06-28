@@ -83,13 +83,25 @@ const recepcionService = {
             `${apiBaseUrl}/recepcion/controlar`,
             controlarRecepcionRequest,
             {
-               
+
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                 }
             },
         ).then(response => response);
-    }
+    },
+
+
+    cancelarRecepcion: (idRecepcion, idUsuario) => {
+        return axios.post(
+            `${apiBaseUrl}/recepcion/cancelar/${idRecepcion}/?idUsuario=${idUsuario}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
+    },
 }
 
 

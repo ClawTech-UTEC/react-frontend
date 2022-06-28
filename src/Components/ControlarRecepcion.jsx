@@ -7,10 +7,11 @@ import { Button, Divider, Grid, Paper, Table, TableBody, TableCell, TableContain
 import SearchBar from 'material-ui-search-bar';
 import React, { useState } from 'react';
 import Barcode from 'react-barcode';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import recepcionService from '../Servicios/RecepcionService';
 import ConfirmationDiolog from './ConfirmationDiolog';
+import InformationDiolog from './InformationDiolog';
 
 const ControlarRecepcion = () => {
     let location = useLocation();
@@ -19,6 +20,8 @@ const ControlarRecepcion = () => {
     const [cantidadesRecibidas, setCantidadesRecibidas] = useState({});
     const recepcion = location.state;
     const [openConfirmation, setOpenConfirmation] = useState(false);
+    const navigate = useNavigate();
+    const [openInformation, setOpenInformation] = useState(false);
 
     const cancelSearch = () => {
         setSearched("");
@@ -71,14 +74,17 @@ const ControlarRecepcion = () => {
             true
         ).then(response => {
             if (response.status === 200) {
-                window.location.replace("http://localhost:3000/");
+                setOpenInformation(true);
             }
         }).catch(error => {
             setError(error.response.data.message);
         })
 
     }
-
+    const onVolver = () => {
+        navigate("/recepciones");
+        setOpenInformation(false);
+    };
     return (
         <div className='background'>
             <Container >
@@ -177,6 +183,7 @@ const ControlarRecepcion = () => {
                 </form>
             </Container>
             <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
+            <InformationDiolog open={openInformation} title="Recepcion Controlada con Exito" onAccept={onVolver}></InformationDiolog>
 
         </div>
 

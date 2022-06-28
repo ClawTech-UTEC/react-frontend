@@ -31,7 +31,7 @@ export default function RecepcionesTable(props) {
     const requestSearch = (searchedVal) => {
         const filteredRows = recepciones.filter((row) => {
             return row.idRecepcion.toString().toLowerCase().includes(searchedVal.toLowerCase()) ||
-                row.recepcion.provedor.nombreProv.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.provedor.nombreProv.toLowerCase().includes(searchedVal.toLowerCase()) ||
                 row.estadoRecepcion[row.estadoRecepcion.length - 1].tipoEstado.toLowerCase().includes(searchedVal.toLowerCase()) ||
                 row.estadoRecepcion[0].usuario.nombre.toString().toLowerCase().includes(searchedVal.toLowerCase()) 
                 ;

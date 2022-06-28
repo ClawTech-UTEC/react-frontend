@@ -98,3 +98,10 @@
   text-align: right;
   color: white;
 }	
+
+
+.formPaperContainer{
+ 
+  justify-content: center;
+  padding: 5px;
+}
