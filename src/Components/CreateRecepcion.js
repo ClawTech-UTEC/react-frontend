@@ -124,8 +124,6 @@ export default function CreateRecepcion() {
             }]
         }
 
-
-
         recepcionService.crearRecepcion(recepcion).then(response => {
             console.log(response.data);
             navigate('/detalleRecepcion', {
