@@ -23,7 +23,12 @@ export const SidebarData = [
     icon: <FaIcons.FaWarehouse />,
     cName: 'nav-text'
   },
-
+  {
+    title: 'Stock',
+    path: '/stock',
+    icon: <FaIcons.FaWarehouse />,
+    cName: 'nav-text'
+  },
 
 
   {
