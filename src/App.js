@@ -20,6 +20,7 @@ import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
 import ControlarRecepcion from './Components/ControlarRecepcion';
 import PedidosTable from './Components/PedidosTable';
+import CrearPedido from './Components/CrearPedido';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
         <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
         <Route path="/pedidos" element={<PedidosTable />}></Route>
+        <Route path="/crearPedido" element={<CrearPedido />}></Route>
 
 
 

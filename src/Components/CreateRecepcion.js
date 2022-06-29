@@ -11,11 +11,9 @@ import * as yup from 'yup';
 import recepcionService from '../Servicios/RecepcionService';
 import ConfirmationDiolog from './ConfirmationDiolog';
 import { useLocation, useNavigate } from 'react-router-dom';
-import InformationDiolog from './InformationDiolog';
 
 export default function CreateRecepcion() {
     const navigate = useNavigate();
-    let location = useLocation();
     const validationSchema = yup.object({
         cantidad: yup
             .string('Cantidad')
@@ -40,7 +38,6 @@ export default function CreateRecepcion() {
     const [provedor, setProveedor] = useState(undefined);
     const [tiposProductos, setTiposProductos] = useState([]);
     const [tipoProducto, setTipoProducto] = useState(undefined);
-    const [cantidad, setCantidad] = useState(0);
     const [productosAgregados, setProductosAgregados] = useState([]);
     const [errorAgregarProductos, setErrorAgregarProductos] = useState([]);
     const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -71,10 +68,7 @@ export default function CreateRecepcion() {
         console.log(value);
         setTipoProducto(value)
     }
-    const onCantidadChange = (event, value) => {
-        console.log(value);
-        setCantidad(value)
-    }
+  
     const onAgregarProducto = (cantidad) => {
         if (provedor === undefined || provedor === null || tipoProducto === undefined || tipoProducto === null) {
             setErrorAgregarProductos("Debes seleccionar un proveedor y un tipo de producto");
@@ -120,7 +114,6 @@ export default function CreateRecepcion() {
         });
 
     }
-
     return (
         <div className='background'>
             <Container fixed>

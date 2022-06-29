@@ -20,25 +20,12 @@ import { Link } from "react-router-dom";
 
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 export default function RecepcionesTable(props) {
     const [recepciones, setRecepciones] = useState([]);
     const [filteredRecepciones, setfilteredRecepciones] = useState([]);
     const navigate = useNavigate();
     const [searched, setSearched] = useState("");
-    const requestSearch = (searchedVal) => {
-        const filteredRows = recepciones.filter((row) => {
-            return row.idRecepcion.toString().toLowerCase().includes(searchedVal.toLowerCase()) ||
-                row.provedor.nombreProv.toLowerCase().includes(searchedVal.toLowerCase()) ||
-                row.estadoRecepcion[row.estadoRecepcion.length - 1].tipoEstado.toLowerCase().includes(searchedVal.toLowerCase()) ||
-                row.estadoRecepcion[0].usuario.nombre.toString().toLowerCase().includes(searchedVal.toLowerCase()) 
-                ;
-        });
-        console.log(searchedVal);
-        setfilteredRecepciones(filteredRows);
-    };
+   
     useEffect(() => {
         let ignore = false;
         recepcionService.getRecepciones().then(response => {
@@ -51,6 +38,18 @@ export default function RecepcionesTable(props) {
         setRecepciones(recepciones)
          setfilteredRecepciones(recepciones)
     }
+    const requestSearch = (searchedVal) => {
+        const filteredRows = recepciones.filter((row) => {
+            return row.idRecepcion.toString().toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.provedor.nombreProv.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.estadoRecepcion[row.estadoRecepcion.length - 1].tipoEstado.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                row.estadoRecepcion[0].usuario.nombre.toString().toLowerCase().includes(searchedVal.toLowerCase())
+                ;
+        });
+        console.log(searchedVal);
+        setfilteredRecepciones(filteredRows);
+    };
+
     const cancelSearch = () => {
         setSearched("");
         requestSearch(searched);
