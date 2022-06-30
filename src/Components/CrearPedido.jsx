@@ -1,36 +1,433 @@
-import { Grid, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Box, Button, Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
+import { Autocomplete, Alert } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { stockService } from '../Servicios/StockService';
+import { useFormik } from 'formik';
 
+import * as yup from 'yup';
+import SearchBar from 'material-ui-search-bar';
+import ConfirmationDiolog from './ConfirmationDiolog';
+import { pedidosService } from '../Servicios/PedidosService';
+import { clienteService } from '../Servicios/ClienteService';
 const CrearPedido = () => {
 
     const [productosDisponibles, setProductosDisponibles] = useState([]);
     const [todosLosProductos, setTodosLosProductos] = useState([]);
-    
+    const [productoSeleccionado, setProductoSeleccionado] = useState(undefined);
+    const [errorAgregarProductos, setErrorAgregarProductos] = useState("");
+    const [productosAgregados, setProductosAgregados] = useState([]);
+    const [openConfirmation, setOpenConfirmation] = useState(false);
+    const [searched, setSearched] = useState("");
+    const [clientes, setclientes] = useState([]);
 
 
 
+    const navigate = useNavigate();
+    const validationSchemaProductos = yup.object({
+        cantidad: yup
+            .number('Cantidad').min(1, 'La cantidad debe ser mayor a 0')
+            .required('Debes ingresar una cantidad'),
+        tipoProducto: yup.object("producto").required("Debes seleccionar un producto"),
+    });
+    const formikProductos = useFormik({
+        initialValues: {
+            cantidad: 1,
+        },
+        validationSchema: validationSchemaProductos,
+        onSubmit: (values) => {
+            onAgregarProducto(productoSeleccionado, values.cantidad);
+        },
+    });
+
+    const validationSchemaClientes = yup.object({
+        documento: yup.string('Documento').required('Debes ingresar un documento'),
+        nombre: yup.string('Nombre Contacto').required('Debes ingresar un nombre'),
+        razonSocial: yup.string('Razon Social').required('Debes ingresar un apellido'),
+        ciudad: yup.string('Ciudad').required('Debes ingresar una ciudad'),
+        direccion: yup.string('Direccion').required('Debes ingresar una direccion'),
+        telefono: yup.string('Telefono').required('Debes ingresar un telefono'),
+        email: yup.string('Email').required('Debes ingresar un email'),
+
+    });
+
+    const formikCliente = useFormik({
+        initialValues: {
+            documento: "",
+            nombre: "",
+            razonSocial: "",
+            ciudad: "",
+            direccion: "",
+            telefono: "",
+            email: "",
+            
+        },
+        validationSchema: validationSchemaClientes,
+        onSubmit: (values) => {
+            
+        }
+    })
+
+
+
+    useEffect(() => {
+        let ignore = false;
+        stockService.getProductos().then(response => {
+            console.log(response.data);
+            cargarProductos(response.data);
+        });
+
+        clienteService.getClientes().then(response => {
+            console.log(response.data);
+            cargarClientes(response.data);
+        }
+        )
+
+        return () => { ignore = true; };
+    }, []);
+
+    const cargarProductos = (productos) => {
+        setProductosDisponibles(productos);
+    }
+    const cargarClientes = (clientes) => {
+        setclientes(clientes);
+    }
+
+    const handleProductoChange = (event, value) => {
+        setProductoSeleccionado(value);
+    }
+
+    const onAgregarProducto = (producto, cantidad) => {
+
+
+        if (producto === undefined || producto === null) {
+            setErrorAgregarProductos("Debes seleccionar un producto");
+            return;
+        } else if (cantidad > producto.cantidadDisponible) {
+            setErrorAgregarProductos("No hay suficiente cantidad disponible");
+            return;
+        }
+        else {
+            setErrorAgregarProductos("");
+        }
+        let tipoProducto = producto.tipoProducto
+        let indiceSiYaExiste = productosAgregados.indexOf(productosAgregados.find(object => object.producto === tipoProducto));
+        if (indiceSiYaExiste !== -1) {
+            if (productosAgregados[indiceSiYaExiste].cantidad + cantidad > producto.cantidadDisponible) {
+                setErrorAgregarProductos("No hay suficiente cantidad disponible");
+                return;
+            }
+            productosAgregados[indiceSiYaExiste] = {
+                producto: tipoProducto,
+                cantidad: productosAgregados[indiceSiYaExiste].cantidad + cantidad
+            }
+            setProductosAgregados([...productosAgregados]);
+            return
+        }
+        const nuevoProductoAgregadp = {
+            producto: tipoProducto,
+            cantidad: cantidad
+        }
+        setProductosAgregados([...productosAgregados, nuevoProductoAgregadp]);
+    }
+
+
+    const onSearch = (searchedVal) => {
+        setSearched(searchedVal);
+        productosDisponibles.forEach(producto => {
+            if (producto.tipoProducto.codigoDeBarras.toString() === searchedVal) {
+                setProductoSeleccionado(producto);
+                onAgregarProducto(producto, 1);
+                setSearched("");
+
+            }
+        });
+    }
+
+    const cancelSearch = () => {
+        setSearched("");
+
+    };
+
+
+    const clienteChange = (event, value) => {
+        formikCliente.setFieldValue("documento", value.documento);
+        formikCliente.setFieldValue("nombre", value.nombre);
+        formikCliente.setFieldValue("razonSocial", value.razonSocial);
+        formikCliente.setFieldValue("ciudad", value.ciudad);
+        formikCliente.setFieldValue("direccion", value.direccion);
+        formikCliente.setFieldValue("telefono", value.telefono);
+        formikCliente.setFieldValue("email", value.email);
+    }
+
+
+    const onCrearPedido = () => {
+        let pedido = {
+            cliente: formikCliente.values,
+            productos: productosAgregados,
+            fecha: new Date(),
+            direccion: formikCliente.values.direccion,
+            
+        }
+
+
+
+
+        pedidosService.createPedido(productosAgregados).then(response => {
+
+        })
+
+    }
+
+    const calcularDisponible = () => {
+        console.log(productosAgregados);
+        console.log(productoSeleccionado);
+        let tipoProducto = productoSeleccionado.tipoProducto;
+
+        let indiceSiYaExiste = productosAgregados.indexOf(productosAgregados.find(object => object.producto === tipoProducto));
+        let cantidadYaAgregada = 0;
+        if (indiceSiYaExiste !== -1) {
+            console.log("indiceSiYaExiste" + productosAgregados[indiceSiYaExiste].cantidad);
+
+            cantidadYaAgregada = productosAgregados[indiceSiYaExiste].cantidad;
+        }
+        return productoSeleccionado.cantidadDisponible - cantidadYaAgregada;
+
+
+    }
 
     return (
         <div className='background'>
-            <Grid
-                container
-                spacing={1}
-                direction="row"
-                justify="center"
-                alignItems="center"
-                alignContent="center"
-                wrap="nowrap"
+            <Container fixed>
 
-            >
-                <Grid item xs={12}>
-                    <Typography variant='h5' className='titulo1' >
-                        Crear Pedido
-                    </Typography>
+
+                <Grid
+                    container
+                    spacing={1}
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    alignContent="center"
+                >
+                    <Grid item xs={12}>
+                        <Typography variant='h5' className='titulo1' >
+                            Crear Pedido
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <SearchBar id="searchBar" placeholder="Ingresar Codigo De Barras"
+                            value={searched} onChange={(searchVal) => onSearch(searchVal)}
+                            searchIcon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16">
+                                <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5zM3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z" />
+                            </svg>
+                            } onCancelSearch={() => cancelSearch()}
+                        />
+                    </Grid>
+
+
+                    <Grid item xs={12} component="paper">
+                        <Paper container className='formPaperContainer' >
+                            <Box component="form" noValidate onSubmit={formikProductos.handleSubmit}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+
+                                    options={productosDisponibles}
+                                    onChange={handleProductoChange}
+                                    getOptionLabel={(option) => option.tipoProducto.nombre || ""}
+                                    error={formikProductos.touched.tipoProducto && Boolean(formikProductos.errors.tipoProducto)}
+                                    renderInput={(params) => <TextField {...params} label="Producto" />}
+                                />
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="cantidad"
+                                        name="cantidad"
+                                        label="Cantidad"
+                                        type="number"
+                                        value={formikProductos.values.cantidad}
+                                        onChange={formikProductos.handleChange}
+                                        error={formikProductos.touched.cantidad && Boolean(formikProductos.errors.cantidad)}
+                                        helperText={formikProductos.touched.cantidad && formikProductos.errors.cantidad}
+                                    />
+                                    {productoSeleccionado ?
+                                        <Alert severity="info"> Disponible: {calcularDisponible()}</Alert> : <div />
+                                    }
+
+                                </Grid>
+
+
+
+                                <Button color="primary" align="center" type="submit">
+                                    Agregar Prodcuto
+                                </Button>
+                                {errorAgregarProductos ?
+                                    <Alert severity="error"> {errorAgregarProductos}</Alert> : <div />
+                                }
+
+
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Typography variant='h5' className='titulo1' >
+                                Detalle Pedido
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                        <TableContainer component={Paper} className='formPaperContainer'>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">Id Producto</TableCell>
+                                        <TableCell align="center">Nombre</TableCell>
+                                        <TableCell align="center">Codigo de Barras</TableCell>
+                                        <TableCell align="center">Precio</TableCell>
+                                        <TableCell align="center">Cantidad</TableCell>
+
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {productosAgregados.map((producto) => (
+                                        <TableRow
+                                            key={producto.producto.idTipoProd}
+                                            sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
+                                        >
+
+                                            <TableCell align="center">{producto.producto.nombre}</TableCell>
+                                            <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
+                                            <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
+                                            <TableCell align="center">${producto.producto.precio}</TableCell>
+                                            <TableCell align="center">{producto.cantidad}</TableCell>
+
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                           
+                        </TableContainer>
+                    </Grid>
+
+
+
+                    <Grid item xs={12}>
+                        <Typography variant='h5' className='titulo1' >
+                            Datos del cliente
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} component="paper">
+                        <Paper container className='formPaperContainer' >
+                            <Box component="form" noValidate onSubmit={formikCliente.handleSubmit}>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-documento"
+
+                                    options={clientes}
+                                    onChange={clienteChange}
+                                    getOptionLabel={(option) => option.documento || ""}
+                                    error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
+                                    renderInput={(params) => <TextField {...params} label="Documento" />}
+                                />
+                                    <TextField
+                                        fullWidth
+                                        id="nombre"
+                                        name="nombre"
+                                        label="Nombre de Contacto"
+                                        type="text"
+                                        value={formikCliente.values.nombre}
+                                        onChange={formikCliente.handleChange}
+                                        error={formikCliente.touched.nombre && Boolean(formikCliente.errors.nombre)}
+                                        helperText={formikCliente.touched.nombre && formikCliente.errors.nombre}
+                                    />
+                                   
+
+                                <TextField
+                                    fullWidth
+                                    id="razonsocial"
+                                    name="razonsocial"
+                                    label="Razon Social"
+                                    type="text"
+                                    value={formikCliente.values.razonSocial}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.razonSocial && Boolean(formikCliente.errors.razonSocial)}
+                                    helperText={formikCliente.touched.razonSocial && formikCliente.errors.razonSocial}
+                                />
+                                <TextField
+                                    fullWidth
+                                    id="ciudad"
+                                    name="ciudad"
+                                    label="Ciudad"
+                                    type="text"
+                                    value={formikCliente.values.ciudad}
+                                    onChange={formikCliente.ciudad}
+                                    error={formikCliente.touched.ciudad && Boolean(formikCliente.errors.ciudad)}
+                                    helperText={formikCliente.touched.ciudad && formikCliente.errors.ciudad}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    id="direccion"
+                                    name="direccion"
+                                    label="Direccion"
+                                    type="text"
+                                    value={formikCliente.values.direccion}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.direccion && Boolean(formikCliente.errors.direccion)}
+                                    helperText={formikCliente.touched.direccion && formikCliente.errors.direccion}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    id="telefono"
+                                    name="telefono"
+                                    label="Telefono"
+                                    type="text"
+                                    value={formikCliente.values.telefono}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
+                                    helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    id="email"
+                                    name="email"
+                                    label="email"
+                                    type="email"
+                                    value={formikCliente.values.telefono}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
+                                    helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
+                                />
+
+                                <Button color="primary" align="center" type="submit">
+                                    Crear Pedido
+                                </Button>
+                               
+
+
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+
+
+
+
+
+
+
+
+
                 </Grid>
+                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() =>
+                    (false)} onAccept={() => onCrearPedido} ></ConfirmationDiolog>
 
-
-            </Grid>
-
+            </Container>
         </div>
     );
 }
