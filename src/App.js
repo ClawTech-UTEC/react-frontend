@@ -18,7 +18,15 @@ import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
 import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
+
 import TipoProdComp from './Components/TipoProdComp';
+
+import ControlarRecepcion from './Components/ControlarRecepcion';
+import PedidosTable from './Components/PedidosTable';
+import CrearPedido from './Components/CrearPedido';
+import StockTable from './Components/TablaStock';
+import DetallePedido from './Components/DetallePedido';
+
 
 
 function App() {
@@ -42,7 +50,12 @@ function App() {
         <Route path="/recepciones" element={<RecepcionesTable />}></Route>
         <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
         <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
-        <Route path="/add-tipoProd" element={<TipoProdComp />}></Route>
+        <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
+        <Route path="/pedidos" element={<PedidosTable />}></Route>
+        <Route path="/crearPedido" element={<CrearPedido />}></Route>
+        <Route path="/detallePedido" element={<DetallePedido />}></Route>
+
+        <Route path="/stock" element={<StockTable />}></Route>
 
 
 

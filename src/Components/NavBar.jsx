@@ -24,7 +24,7 @@ function Navbar() {
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
           <div className='titulo'>
-            <p>IlogApp</p>
+            IlogApp
           </div>
 
           <Link to='/' className="menu-bars botonSalir">
