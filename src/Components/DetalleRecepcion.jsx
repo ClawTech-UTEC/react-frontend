@@ -24,7 +24,7 @@ const DetalleRecepcion = () => {
         recepcionService.cancelarRecepcion(recepcion.idRecepcion, localStorage.getItem("idUsuario")).then((responce) => {
             if (responce.status === 200) {
                 setOpenInformation(true);
-            }else{
+            } else {
                 error("Error al cancelar la recepcion");
             }
         })
@@ -46,7 +46,7 @@ const DetalleRecepcion = () => {
 
                     <Grid item xs={0} md={3}>
                     </Grid>
-                    <Grid  xs={12} md={6}  item container spacing={2} component={Paper} align="center">
+                    <Grid xs={12} md={6} item container spacing={2} component={Paper} align="center">
                         <Grid item xs={6} align="left">
                             <Typography variant="h6">
                                 Recepcion No. {recepcion.idRecepcion}
@@ -122,15 +122,15 @@ const DetalleRecepcion = () => {
                             <Button variant="contained" color="primary" >Imprimir</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            {recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado == "PENDIENTE"?         <Button variant="contained" color="primary" onClick={() => navigate('/controlarRecepcion', {
+                            {recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado == "PENDIENTE" ? <Button variant="contained" color="primary" onClick={() => navigate('/controlarRecepcion', {
                                 state: recepcion // your data array of objects
-                            })}>Controlar</Button>: <div></div>}
+                            })}>Controlar</Button> : <div></div>}
                         </Grid>
                         <Grid item xs={4}>
                             <Button variant="contained" color="primary" onClick={() => setOpenConfirmation(true)}>Cancelar</Button>
                         </Grid>
 
-                        
+
                         <Grid item xs={3}>
 
                         </Grid></Grid>

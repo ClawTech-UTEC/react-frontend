@@ -10,10 +10,13 @@ import SearchBar from 'material-ui-search-bar';
 import ConfirmationDiolog from './ConfirmationDiolog';
 import { pedidosService } from '../Servicios/PedidosService';
 import { clienteService } from '../Servicios/ClienteService';
+import BackgroundGrid from './Comons/BackgroundGrid';
+import Title from './Comons/Title';
+import BarCodeReader from './Comons/BarCodeReader';
+import TablaProductosPedido from './Comons/TablaProductosPedido';
 const CrearPedido = () => {
 
     const [productosDisponibles, setProductosDisponibles] = useState([]);
-    const [todosLosProductos, setTodosLosProductos] = useState([]);
     const [productoSeleccionado, setProductoSeleccionado] = useState(undefined);
     const [errorAgregarProductos, setErrorAgregarProductos] = useState("");
     const [productosAgregados, setProductosAgregados] = useState([]);
@@ -21,7 +24,6 @@ const CrearPedido = () => {
     const [searched, setSearched] = useState("");
     const [clientes, setclientes] = useState([]);
     const [errorGeneral, setErrorGeneral] = useState("");
-
 
     const navigate = useNavigate();
     const validationSchemaProductos = yup.object({
@@ -68,14 +70,9 @@ const CrearPedido = () => {
                 setErrorGeneral("Debes agregar al menos un producto");
                 return;
             }
-            
-
-
             setOpenConfirmation(true);
         }
     })
-
-
 
     useEffect(() => {
         let ignore = false;
@@ -195,9 +192,9 @@ const CrearPedido = () => {
         pedidosService.createPedido(pedido).then(response => {
             console.log("respuesta")
             console.log(response.data);
-            // navigate('/pedidos', {
-
-            // });
+            navigate('/detallePedido', {
+                state: response.data
+            });
             setOpenConfirmation(false);
         })
 
@@ -230,265 +227,173 @@ const CrearPedido = () => {
     }
 
     return (
-        <div className='background'>
-            <Container fixed>
+        <BackgroundGrid>
 
+            <Title title="Crear Pedido" />
+            <BarCodeReader xs={12} id="searchBar" placeholder="Ingresar Codigo De Barras"
+                value={searched} onChange={(searchVal) => onSearch(searchVal)}
+                onCancelSearch={() => cancelSearch()}
+            />
+            <Grid item xs={12} component="paper">
+                <Paper container className='formPaperContainer' >
+                    <Box component="form" noValidate onSubmit={formikProductos.handleSubmit}>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
 
-                <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    alignContent="center"
-                >
-                    <Grid item xs={12}>
-                        <Typography variant='h5' className='titulo1' >
-                            Crear Pedido
-                        </Typography>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <SearchBar id="searchBar" placeholder="Ingresar Codigo De Barras"
-                            value={searched} onChange={(searchVal) => onSearch(searchVal)}
-                            searchIcon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16">
-                                <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5zM3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z" />
-                            </svg>
-                            } onCancelSearch={() => cancelSearch()}
+                            options={productosDisponibles}
+                            onChange={handleProductoChange}
+                            getOptionLabel={(option) => option.tipoProducto.nombre || ""}
+                            error={formikProductos.touched.tipoProducto && Boolean(formikProductos.errors.tipoProducto)}
+                            renderInput={(params) => <TextField {...params} label="Producto" />}
                         />
-                    </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                id="cantidad"
+                                name="cantidad"
+                                label="Cantidad"
+                                type="number"
+                                value={formikProductos.values.cantidad}
+                                onChange={formikProductos.handleChange}
+                                error={formikProductos.touched.cantidad && Boolean(formikProductos.errors.cantidad)}
+                                helperText={formikProductos.touched.cantidad && formikProductos.errors.cantidad}
+                            />
+                            {productoSeleccionado ?
+                                <Alert severity="info"> Disponible: {calcularDisponible()}</Alert> : <div />
+                            }
+
+                        </Grid>
+                        <Button color="primary" align="center" type="submit">
+                            Agregar Prodcuto
+                        </Button>
+                        {errorAgregarProductos ?
+                            <Alert severity="error"> {errorAgregarProductos}</Alert> : <div />
+                        }
+                    </Box>
+                </Paper>
+            </Grid>
 
 
-                    <Grid item xs={12} component="paper">
-                        <Paper container className='formPaperContainer' >
-                            <Box component="form" noValidate onSubmit={formikProductos.handleSubmit}>
-                                <Autocomplete
-                                    disablePortal
-                                    id="combo-box-demo"
+            <Title title={"Detalle Pedido"} >
 
-                                    options={productosDisponibles}
-                                    onChange={handleProductoChange}
-                                    getOptionLabel={(option) => option.tipoProducto.nombre || ""}
-                                    error={formikProductos.touched.tipoProducto && Boolean(formikProductos.errors.tipoProducto)}
-                                    renderInput={(params) => <TextField {...params} label="Producto" />}
-                                />
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="cantidad"
-                                        name="cantidad"
-                                        label="Cantidad"
-                                        type="number"
-                                        value={formikProductos.values.cantidad}
-                                        onChange={formikProductos.handleChange}
-                                        error={formikProductos.touched.cantidad && Boolean(formikProductos.errors.cantidad)}
-                                        helperText={formikProductos.touched.cantidad && formikProductos.errors.cantidad}
-                                    />
-                                    {productoSeleccionado ?
-                                        <Alert severity="info"> Disponible: {calcularDisponible()}</Alert> : <div />
-                                    }
-
-                                </Grid>
+            </Title>
+            <TablaProductosPedido xs={12} md={12} productosAgregados={productosAgregados}/>
 
 
+            
 
-                                <Button color="primary" align="center" type="submit">
-                                    Agregar Prodcuto
-                                </Button>
-                                {errorAgregarProductos ?
-                                    <Alert severity="error"> {errorAgregarProductos}</Alert> : <div />
-                                }
+            <Title title={"Datos del cliente"}/>
+               
 
+            <Grid item xs={12} component="paper">
+                <Paper container className='formPaperContainer' >
+                    <Box component="form" noValidate onSubmit={formikCliente.handleSubmit}>
+                        <Autocomplete
+                            id="combo-box-documento"
+                            options={clientes}
+                            onChange={clienteChange}
+                            getOptionLabel={(option) => option.documento || ""}
+                            error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
+                            renderInput={(params) => <TextField {...params} label="Buscar cliente" />}
+                        />
+                        <TextField
+                            fullWidth
+                            id="documento"
+                            name="documento"
+                            label="Documento"
+                            type="text"
+                            value={formikCliente.values.documento}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
+                            helperText={formikCliente.touched.documento && formikCliente.errors.documento}
+                        />
 
-                            </Box>
-                        </Paper>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Typography variant='h5' className='titulo1' >
-                            Detalle Pedido
-                        </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                        <TableContainer component={Paper} className='formPaperContainer'>
-                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="center">Id Producto</TableCell>
-                                        <TableCell align="center">Nombre</TableCell>
-                                        <TableCell align="center">Codigo de Barras</TableCell>
-                                        <TableCell align="center">Precio</TableCell>
-                                        <TableCell align="center">Cantidad</TableCell>
-
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {productosAgregados.map((producto) => (
-                                        <TableRow
-                                            key={producto.producto.idTipoProd}
-                                            sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
-                                        >
-
-                                            <TableCell align="center">{producto.producto.nombre}</TableCell>
-                                            <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
-                                            <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
-                                            <TableCell align="center">${producto.producto.precio}</TableCell>
-                                            <TableCell align="center">{producto.cantidad}</TableCell>
-
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-
-                        </TableContainer>
-                    </Grid>
-                   
-                    <Grid item xs={12}>
-                        <TableContainer component={Paper} className='formPaperContainer'>
-                            <Table sx={{ minWidth: 650 }} aria-label="simple table" >
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="center">Cantidad total de Productos</TableCell>
-
-                                        <TableCell align="center">Costo Total</TableCell>
-
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-
-                                    <TableRow
-
-                                        sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}>
-                                        <TableCell align="center">{productosAgregados.reduce((total, pedidoProducto) => total + pedidoProducto.cantidad , 0)}</TableCell>
-
-                                        <TableCell align="center">${calcularTotal()}</TableCell>
-                                    </TableRow>
-
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid>
+                        <TextField
+                            fullWidth
+                            id="nombre"
+                            name="nombre"
+                            label="Nombre de Contacto"
+                            type="text"
+                            value={formikCliente.values.nombre}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.nombre && Boolean(formikCliente.errors.nombre)}
+                            helperText={formikCliente.touched.nombre && formikCliente.errors.nombre}
+                        />
 
 
+                        <TextField
+                            fullWidth
+                            id="razonSocial"
+                            name="razonSocial"
+                            label="Razon Social"
+                            type="text"
+                            value={formikCliente.values.razonSocial}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.razonSocial && Boolean(formikCliente.errors.razonSocial)}
+                            helperText={formikCliente.touched.razonSocial && formikCliente.errors.razonSocial}
+                        />
+                        <TextField
+                            fullWidth
+                            id="ciudad"
+                            name="ciudad"
+                            label="Ciudad"
+                            type="text"
+                            value={formikCliente.values.ciudad}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.ciudad && Boolean(formikCliente.errors.ciudad)}
+                            helperText={formikCliente.touched.ciudad && formikCliente.errors.ciudad}
+                        />
 
-                    <Grid item xs={12}>
-                        <Typography variant='h5' className='titulo1' >
-                            Datos del cliente
-                        </Typography>
-                    </Grid>
+                        <TextField
+                            fullWidth
+                            id="direccion"
+                            name="direccion"
+                            label="Direccion"
+                            type="text"
+                            value={formikCliente.values.direccion}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.direccion && Boolean(formikCliente.errors.direccion)}
+                            helperText={formikCliente.touched.direccion && formikCliente.errors.direccion}
+                        />
 
-                    <Grid item xs={12} component="paper">
-                        <Paper container className='formPaperContainer' >
-                            <Box component="form" noValidate onSubmit={formikCliente.handleSubmit}>
-                                <Autocomplete
-                                    id="combo-box-documento"
+                        <TextField
+                            fullWidth
+                            id="telefono"
+                            name="telefono"
+                            label="Telefono"
+                            type="text"
+                            value={formikCliente.values.telefono}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
+                            helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
+                        />
+                        <TextField
+                            fullWidth
+                            id="email"
+                            name="email"
+                            label="email"
+                            type="email"
+                            value={formikCliente.values.email}
+                            onChange={formikCliente.handleChange}
+                            error={formikCliente.touched.email && Boolean(formikCliente.errors.email)}
+                            helperText={formikCliente.touched.email && formikCliente.errors.email}
+                        />
+                        <Button color="primary" align="center" type="submit">
+                            Crear Pedido
+                        </Button>
+                        {errorGeneral ?
+                            <Alert severity="error"> {errorGeneral}</Alert> : <div />
+                        }
+                    </Box>
+                </Paper>
+            </Grid>
 
-                                    options={clientes}
-                                    onChange={clienteChange}
-                                    getOptionLabel={(option) => option.documento || ""}
-                                    error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
-                                    renderInput={(params) => <TextField {...params} label="Buscar cliente" />}
-                                />
+            <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear el pedido?"
+                onNoAccept={() => setOpenConfirmation(false)}
+                onAccept={() => onCrearPedido} ></ConfirmationDiolog>
 
-                                <TextField
-                                    fullWidth
-                                    id="documento"
-                                    name="documento"
-                                    label="Documento"
-                                    type="text"
-                                    value={formikCliente.values.documento}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
-                                    helperText={formikCliente.touched.documento && formikCliente.errors.documento}
-                                  />
-
-                                <TextField
-                                    fullWidth
-                                    id="nombre"
-                                    name="nombre"
-                                    label="Nombre de Contacto"
-                                    type="text"
-                                    value={formikCliente.values.nombre}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.nombre && Boolean(formikCliente.errors.nombre)}
-                                    helperText={formikCliente.touched.nombre && formikCliente.errors.nombre}
-                                />
-
-
-                                <TextField
-                                    fullWidth
-                                    id="razonSocial"
-                                    name="razonSocial"
-                                    label="Razon Social"
-                                    type="text"
-                                    value={formikCliente.values.razonSocial}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.razonSocial && Boolean(formikCliente.errors.razonSocial)}
-                                    helperText={formikCliente.touched.razonSocial && formikCliente.errors.razonSocial}
-                                />
-                                <TextField
-                                    fullWidth
-                                    id="ciudad"
-                                    name="ciudad"
-                                    label="Ciudad"
-                                    type="text"
-                                    value={formikCliente.values.ciudad}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.ciudad && Boolean(formikCliente.errors.ciudad)}
-                                    helperText={formikCliente.touched.ciudad && formikCliente.errors.ciudad}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    id="direccion"
-                                    name="direccion"
-                                    label="Direccion"
-                                    type="text"
-                                    value={formikCliente.values.direccion}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.direccion && Boolean(formikCliente.errors.direccion)}
-                                    helperText={formikCliente.touched.direccion && formikCliente.errors.direccion}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    id="telefono"
-                                    name="telefono"
-                                    label="Telefono"
-                                    type="text"
-                                    value={formikCliente.values.telefono}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
-                                    helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
-                                />
-                                <TextField
-                                    fullWidth
-                                    id="email"
-                                    name="email"
-                                    label="email"
-                                    type="email"
-                                    value={formikCliente.values.email}
-                                    onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.email && Boolean(formikCliente.errors.email)}
-                                    helperText={formikCliente.touched.email && formikCliente.errors.email}
-                                />
-                                <Button color="primary" align="center" type="submit">
-                                    Crear Pedido
-                                </Button>
-                                {errorGeneral ?
-                                    <Alert severity="error"> {errorGeneral}</Alert> : <div />
-                                }
-                            </Box>
-                        </Paper>
-                    </Grid>
-                </Grid>
-                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear el pedido?"
-                    onNoAccept={() => setOpenConfirmation(false)}
-                    onAccept={() => onCrearPedido} ></ConfirmationDiolog>
-
-            </Container>
-        </div>
+        </BackgroundGrid>
     );
 }
 

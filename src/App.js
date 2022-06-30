@@ -22,6 +22,7 @@ import ControlarRecepcion from './Components/ControlarRecepcion';
 import PedidosTable from './Components/PedidosTable';
 import CrearPedido from './Components/CrearPedido';
 import StockTable from './Components/TablaStock';
+import DetallePedido from './Components/DetallePedido';
 
 
 function App() {
@@ -48,6 +49,8 @@ function App() {
         <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
         <Route path="/pedidos" element={<PedidosTable />}></Route>
         <Route path="/crearPedido" element={<CrearPedido />}></Route>
+        <Route path="/detallePedido" element={<DetallePedido />}></Route>
+
         <Route path="/stock" element={<StockTable />}></Route>
 
 
