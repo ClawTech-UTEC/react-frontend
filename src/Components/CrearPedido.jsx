@@ -20,7 +20,7 @@ const CrearPedido = () => {
     const [openConfirmation, setOpenConfirmation] = useState(false);
     const [searched, setSearched] = useState("");
     const [clientes, setclientes] = useState([]);
-
+    const [errorGeneral, setErrorGeneral] = useState("");
 
 
     const navigate = useNavigate();
@@ -60,11 +60,18 @@ const CrearPedido = () => {
             direccion: "",
             telefono: "",
             email: "",
-            
+
         },
         validationSchema: validationSchemaClientes,
         onSubmit: (values) => {
+            if (productosAgregados.length === 0) {
+                setErrorGeneral("Debes agregar al menos un producto");
+                return;
+            }
             
+
+
+            setOpenConfirmation(true);
         }
     })
 
@@ -151,6 +158,8 @@ const CrearPedido = () => {
 
 
     const clienteChange = (event, value) => {
+        console.log("Valor recibido");
+        console.log(value);
         formikCliente.setFieldValue("documento", value.documento);
         formikCliente.setFieldValue("nombre", value.nombre);
         formikCliente.setFieldValue("razonSocial", value.razonSocial);
@@ -161,39 +170,63 @@ const CrearPedido = () => {
     }
 
 
+
+
     const onCrearPedido = () => {
         let pedido = {
             cliente: formikCliente.values,
             productos: productosAgregados,
-            fecha: new Date(),
+            fechaPedido: new Date(),
             direccion: formikCliente.values.direccion,
-            
+            total: calcularTotal(),
+            estadoPedido: [{
+                fecha: new Date(),
+                tipoEstadoPedido: "PENDIENTE",
+                usuario: {
+                    idUsuario: localStorage.getItem("idUsuario")
+                }
+            }]
+
         }
 
 
 
 
-        pedidosService.createPedido(productosAgregados).then(response => {
+        pedidosService.createPedido(pedido).then(response => {
+            console.log("respuesta")
+            console.log(response.data);
+            // navigate('/pedidos', {
 
+            // });
+            setOpenConfirmation(false);
         })
 
     }
 
     const calcularDisponible = () => {
-        console.log(productosAgregados);
-        console.log(productoSeleccionado);
         let tipoProducto = productoSeleccionado.tipoProducto;
 
         let indiceSiYaExiste = productosAgregados.indexOf(productosAgregados.find(object => object.producto === tipoProducto));
         let cantidadYaAgregada = 0;
         if (indiceSiYaExiste !== -1) {
-            console.log("indiceSiYaExiste" + productosAgregados[indiceSiYaExiste].cantidad);
 
             cantidadYaAgregada = productosAgregados[indiceSiYaExiste].cantidad;
         }
         return productoSeleccionado.cantidadDisponible - cantidadYaAgregada;
 
 
+    }
+
+
+    const calcularTotal = () => {
+        let total = 0;
+        console.log("productosAgregados");
+        console.log(productosAgregados);
+        productosAgregados.forEach(producto => {
+            total += producto.cantidad * producto.producto.precio;
+        }
+        )
+        return total;
     }
 
     return (
@@ -273,7 +306,7 @@ const CrearPedido = () => {
 
                     <Grid item xs={12}>
                         <Typography variant='h5' className='titulo1' >
-                                Detalle Pedido
+                            Detalle Pedido
                         </Typography>
                     </Grid>
 
@@ -307,7 +340,33 @@ const CrearPedido = () => {
                                     ))}
                                 </TableBody>
                             </Table>
-                           
+
+                        </TableContainer>
+                    </Grid>
+                   
+                    <Grid item xs={12}>
+                        <TableContainer component={Paper} className='formPaperContainer'>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">Cantidad total de Productos</TableCell>
+
+                                        <TableCell align="center">Costo Total</TableCell>
+
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+
+                                    <TableRow
+
+                                        sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}>
+                                        <TableCell align="center">{productosAgregados.reduce((total, pedidoProducto) => total + pedidoProducto.cantidad , 0)}</TableCell>
+
+                                        <TableCell align="center">${calcularTotal()}</TableCell>
+                                    </TableRow>
+
+                                </TableBody>
+                            </Table>
                         </TableContainer>
                     </Grid>
 
@@ -323,32 +382,44 @@ const CrearPedido = () => {
                         <Paper container className='formPaperContainer' >
                             <Box component="form" noValidate onSubmit={formikCliente.handleSubmit}>
                                 <Autocomplete
-                                    disablePortal
                                     id="combo-box-documento"
 
                                     options={clientes}
                                     onChange={clienteChange}
                                     getOptionLabel={(option) => option.documento || ""}
                                     error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
-                                    renderInput={(params) => <TextField {...params} label="Documento" />}
+                                    renderInput={(params) => <TextField {...params} label="Buscar cliente" />}
                                 />
-                                    <TextField
-                                        fullWidth
-                                        id="nombre"
-                                        name="nombre"
-                                        label="Nombre de Contacto"
-                                        type="text"
-                                        value={formikCliente.values.nombre}
-                                        onChange={formikCliente.handleChange}
-                                        error={formikCliente.touched.nombre && Boolean(formikCliente.errors.nombre)}
-                                        helperText={formikCliente.touched.nombre && formikCliente.errors.nombre}
-                                    />
-                                   
 
                                 <TextField
                                     fullWidth
-                                    id="razonsocial"
-                                    name="razonsocial"
+                                    id="documento"
+                                    name="documento"
+                                    label="Documento"
+                                    type="text"
+                                    value={formikCliente.values.documento}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.documento && Boolean(formikCliente.errors.documento)}
+                                    helperText={formikCliente.touched.documento && formikCliente.errors.documento}
+                                  />
+
+                                <TextField
+                                    fullWidth
+                                    id="nombre"
+                                    name="nombre"
+                                    label="Nombre de Contacto"
+                                    type="text"
+                                    value={formikCliente.values.nombre}
+                                    onChange={formikCliente.handleChange}
+                                    error={formikCliente.touched.nombre && Boolean(formikCliente.errors.nombre)}
+                                    helperText={formikCliente.touched.nombre && formikCliente.errors.nombre}
+                                />
+
+
+                                <TextField
+                                    fullWidth
+                                    id="razonSocial"
+                                    name="razonSocial"
                                     label="Razon Social"
                                     type="text"
                                     value={formikCliente.values.razonSocial}
@@ -363,7 +434,7 @@ const CrearPedido = () => {
                                     label="Ciudad"
                                     type="text"
                                     value={formikCliente.values.ciudad}
-                                    onChange={formikCliente.ciudad}
+                                    onChange={formikCliente.handleChange}
                                     error={formikCliente.touched.ciudad && Boolean(formikCliente.errors.ciudad)}
                                     helperText={formikCliente.touched.ciudad && formikCliente.errors.ciudad}
                                 />
@@ -391,41 +462,30 @@ const CrearPedido = () => {
                                     error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
                                     helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
                                 />
-
                                 <TextField
                                     fullWidth
                                     id="email"
                                     name="email"
                                     label="email"
                                     type="email"
-                                    value={formikCliente.values.telefono}
+                                    value={formikCliente.values.email}
                                     onChange={formikCliente.handleChange}
-                                    error={formikCliente.touched.telefono && Boolean(formikCliente.errors.telefono)}
-                                    helperText={formikCliente.touched.telefono && formikCliente.errors.telefono}
+                                    error={formikCliente.touched.email && Boolean(formikCliente.errors.email)}
+                                    helperText={formikCliente.touched.email && formikCliente.errors.email}
                                 />
-
                                 <Button color="primary" align="center" type="submit">
                                     Crear Pedido
                                 </Button>
-                               
-
-
+                                {errorGeneral ?
+                                    <Alert severity="error"> {errorGeneral}</Alert> : <div />
+                                }
                             </Box>
                         </Paper>
                     </Grid>
-
-
-
-
-
-
-
-
-
-
                 </Grid>
-                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() =>
-                    (false)} onAccept={() => onCrearPedido} ></ConfirmationDiolog>
+                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear el pedido?"
+                    onNoAccept={() => setOpenConfirmation(false)}
+                    onAccept={() => onCrearPedido} ></ConfirmationDiolog>
 
             </Container>
         </div>

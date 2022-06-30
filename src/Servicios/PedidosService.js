@@ -8,7 +8,11 @@ const pedidosService = {
     },
 
     createPedido(pedido) {
-        return axios.post(apiBaseUrl + '/pedidos', pedido);
+        return axios.post(apiBaseUrl + '/pedidos', pedido, {
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+        }).then(response => response);;
     },
 
     prepararPedido: (idPedido, idUsuaurio) => {
