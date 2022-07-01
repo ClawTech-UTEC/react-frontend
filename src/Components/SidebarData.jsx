@@ -56,11 +56,12 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Empresas',
-    path: '/support',
+    title: 'TipoProd',
+    path: '/add-tipoProd',
     icon: <FaIcons.FaWarehouse />,
     cName: 'nav-text'
   },
+  
 
    
 ];

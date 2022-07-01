@@ -18,6 +18,9 @@ import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
 import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
+
+import TipoProdComp from './Components/TipoProdComp';
+
 import ControlarRecepcion from './Components/ControlarRecepcion';
 import PedidosTable from './Components/PedidosTable';
 import CrearPedido from './Components/CrearPedido';
@@ -28,6 +31,7 @@ import ControlarPedido from './Components/ControlarPedido';
 import DespacharPedido from './Components/DespacharPedido';
 import EntregarPedido from './Components/EntregarPedido';
 import DevolverPedido from './Components/DevolverPedido';
+
 
 
 function App() {
