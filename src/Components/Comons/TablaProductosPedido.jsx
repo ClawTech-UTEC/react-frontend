@@ -4,8 +4,8 @@ import React from 'react';
 const TablaProductosPedido = ({ xs, md, productosAgregados }) => {
     return (
         <>
-            <Grid item xs={xs} md={md}>
-                <TableContainer component={Paper} className='formPaperContainer'>
+            <Grid item xs={xs} md={md} >
+                <TableContainer className='formPaperContainer'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -36,7 +36,7 @@ const TablaProductosPedido = ({ xs, md, productosAgregados }) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={12}>
-                <TableContainer component={Paper} className='formPaperContainer'>
+                <TableContainer  className='formPaperContainer'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                         <TableHead>
                             <TableRow>

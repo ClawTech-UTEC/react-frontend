@@ -9,11 +9,9 @@ export default function BackgroundGrid({ children }) {
 
                 <Grid
                     container
-                    spacing={1}
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    alignContent="center"
+                    spacing={0}
+                    align="center"
+                    
                 >
                     {children}
 

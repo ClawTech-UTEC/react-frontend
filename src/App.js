@@ -23,6 +23,11 @@ import PedidosTable from './Components/PedidosTable';
 import CrearPedido from './Components/CrearPedido';
 import StockTable from './Components/TablaStock';
 import DetallePedido from './Components/DetallePedido';
+import PrepararPedido from './Components/PrepararPedido';
+import ControlarPedido from './Components/ControlarPedido';
+import DespacharPedido from './Components/DespacharPedido';
+import EntregarPedido from './Components/EntregarPedido';
+import DevolverPedido from './Components/DevolverPedido';
 
 
 function App() {
@@ -39,7 +44,6 @@ function App() {
 
       <Routes>
         <Route path="/" element={isExpired ? <Login /> : <Principal />}></Route>
-
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
         <Route path="/add-prov" element={<CreateProvComp />}></Route>
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
@@ -50,7 +54,11 @@ function App() {
         <Route path="/pedidos" element={<PedidosTable />}></Route>
         <Route path="/crearPedido" element={<CrearPedido />}></Route>
         <Route path="/detallePedido" element={<DetallePedido />}></Route>
-
+        <Route path="/prepararPedido" element={<PrepararPedido />}></Route>
+        <Route path="/controlarPedido" element={<ControlarPedido />}></Route>
+        <Route path="/despacharPedido" element={<DespacharPedido />}></Route>
+        <Route path="/entregarPedido" element={<EntregarPedido />}></Route>
+        <Route path="/devolverPedido" element={<DevolverPedido />}></Route>
         <Route path="/stock" element={<StockTable />}></Route>
 
 

@@ -1,10 +1,15 @@
-import { Grid } from '@material-ui/core';
+import { ClassNames } from '@emotion/react';
+import { Grid, makeStyles, withStyles } from '@material-ui/core';
 import SearchBar from 'material-ui-search-bar';
 import React from 'react';
 
+
+
+
 const BarCodeReader = ({ value, onChange, onCancelSearch, xs, md }) => {
+
     return (
-        <Grid item xs={xs} md={md}>
+        <Grid   item xs={xs} md={md} >
             <SearchBar id="searchBar" placeholder="Ingresar Codigo De Barras"
                 value={value} onChange={(searchVal) => onChange(searchVal)}
                 searchIcon={<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16">

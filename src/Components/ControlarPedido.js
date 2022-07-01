@@ -11,7 +11,7 @@ import Title from './Comons/Title';
 import ConfirmationDiolog from './ConfirmationDiolog';
 import InformationDiolog from './InformationDiolog';
 
-const PrepararPedido = () => {
+const ControlarPedido = () => {
     let location = useLocation();
     const navigate = useNavigate();
     const [pedido, setPedido] = useState(location.state);
@@ -36,7 +36,7 @@ const PrepararPedido = () => {
                     return
 
                 }
-                
+
                 document.getElementById(producto.producto.idTipoProd).value = viejaCantidad + 1;
                 setSearched("");
 
@@ -76,7 +76,7 @@ const PrepararPedido = () => {
             setCantidadesPreparadas(cantidadesPreparadas);
         })
         console.log(cantidadesPreparadas);
-        pedidosService.prepararPedido(
+        pedidosService.controlarPedido(
             pedido.idPedido,
             parseInt(localStorage.getItem('idUsuario')),
 
@@ -91,69 +91,69 @@ const PrepararPedido = () => {
     }
     return (
         <BackgroundGrid>
-                <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit}>
 
-            <Title
-                title={"Preparar Pedido"}
-            ></Title>
-            <Grid item xs={3}>
-            </Grid>
-            <BarCodeReader
-                xs={6}
-                value={searched} onChange={(searchVal) => onSearch(searchVal)}
-                onCancelSearch={() => cancelSearch()}
-            />
-            <Grid item xs={3}>
-            </Grid>
-            <Grid item xs={12}>
-            </Grid>
-           
-
-            <Grid xs={6} item container spacing={2} component={Paper} align="center">
-                <Grid item xs={6} align="left">
-                    <Typography variant="h6">
-                        Pedido No. {pedido.idPedido}
-                    </Typography>
-                    <Typography variant="subtitle1">
-                        Proveedor: {pedido.cliente.razonSocial}
-                    </Typography>
-                    <Typography variant="subtitle1">
-                        Estado: {pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}
-                    </Typography>
+                <Title
+                    title={"Controlar Pedido"}
+                ></Title>
+                <Grid item xs={3}>
                 </Grid>
-                <Grid item xs={6} align="left">
-                    <Barcode value={pedido.idPedido.toString()} height={50}>
-                    </Barcode>
+                <BarCodeReader
+                    xs={6}
+                    value={searched} onChange={(searchVal) => onSearch(searchVal)}
+                    onCancelSearch={() => cancelSearch()}
+                />
+                <Grid item xs={3}>
                 </Grid>
                 <Grid item xs={12}>
-                    <Divider variant="middle" />
                 </Grid>
+
+
+                <Grid xs={6} item container spacing={2} component={Paper} align="center">
+                    <Grid item xs={6} align="left">
+                        <Typography variant="h6">
+                            Pedido No. {pedido.idPedido}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Proveedor: {pedido.cliente.razonSocial}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Estado: {pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6} align="left">
+                        <Barcode value={pedido.idPedido.toString()} height={50}>
+                        </Barcode>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider variant="middle" />
+                    </Grid>
                     <TablaCantidadesProducto listaProductosCantidad={pedido.productos} />
                     <Grid item xs={4}>
                         <Button variant="contained" color="primary" type="submit" >Aceptar</Button>
                     </Grid>
-                <Grid item xs={4}>
+                    <Grid item xs={4}>
+                    </Grid>
+                    <Grid item xs={3}>
+
+                    </Grid>
+                    <Grid item xs={12}>
+
+                        {error ?
+                            <Alert severity="error"> {error}</Alert> : <div />}
+
+
+                    </Grid>
+                    <Grid item xs={3}>
+
+                    </Grid>
                 </Grid>
-                <Grid item xs={3}>
-
-                </Grid>
-                <Grid item xs={12}>
-
-                    {error ?
-                        <Alert severity="error"> {error}</Alert> : <div />}
-
-
-                </Grid>
-                <Grid item xs={3}>
-
-                </Grid>
-            </Grid>
-            <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta preparar el pedido?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
-            <InformationDiolog open={openInformation} title="Pedido Preparado con Exito" onAccept={onVolver}></InformationDiolog>
+                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta Controlar el pedido?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
+                <InformationDiolog open={openInformation} title="Pedido Controlado con Exito" onAccept={onVolver}></InformationDiolog>
             </form>
 
         </BackgroundGrid>
     );
 }
 
-export default PrepararPedido;
+export default ControlarPedido;

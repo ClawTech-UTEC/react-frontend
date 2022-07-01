@@ -16,21 +16,19 @@ const pedidosService = {
     },
 
     prepararPedido: (idPedido, idUsuaurio) => {
-        return axios.put(`${apiBaseUrl}/pedidos/${idPedido}/?idUsuario=${idUsuaurio}`,
+        return axios.put(`${apiBaseUrl}/pedidos/preparar/${idPedido}/?idUsuario=${idUsuaurio}`,
             {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                 },
             }
-
         );
     },
 
-    controlarPedido: (
-        idPedido, productos, idUsuaurio) => {
+    controlarPedido: (idPedido, idUsuaurio) => {
         return axios.put(
 
-            `apiBaseUrl/pedidos/controlar/${idPedido}/?idUsuario=${idUsuaurio}`,
+            `${apiBaseUrl}/pedidos/controlar/${idPedido}/?idUsuario=${idUsuaurio}`,
             {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
@@ -40,7 +38,7 @@ const pedidosService = {
     },
 
     despacharPedido: (
-        idPedido, idUsuaurio, idDistribuidor) => {
+        {idPedido, idUsuaurio, idDistribuidor}) => {
         return axios.put(
             `${apiBaseUrl}/pedidos/despachar/${idPedido}/?idUsuario=${idUsuaurio}&idDistribuidor=${idDistribuidor}`,
             {
@@ -51,7 +49,7 @@ const pedidosService = {
         );
     },
 
-    entregarPedido: (idPedido, idUsuaurio) => {
+    entregarPedido: ({idPedido, idUsuaurio}) => {
         return axios.put(
 
             `${apiBaseUrl}/pedidos/entregar/${idPedido}/?idUsuario=${idUsuaurio}`,
@@ -66,7 +64,7 @@ const pedidosService = {
     },
 
 
-    devolverPedido: (idPedido, idUsuaurio) => {
+    devolverPedido: ({idPedido, idUsuaurio}) => {
         return axios.put(
 
             `${apiBaseUrl}/pedidos/devolver/${idPedido}/?idUsuario=${idUsuaurio}`,
@@ -106,7 +104,7 @@ const pedidosService = {
     getReporteProductoPedidoAnual: (
         year, idProducto) => {
         return axios.get(
-            `apiBaseUrl/pedidos/reporte/$year/?idProducto=$idProducto`,
+            `${apiBaseUrl}/pedidos/reporte/${year}/?idProducto=${idProducto}`,
             {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
@@ -114,6 +112,9 @@ const pedidosService = {
             }
         )
     },
+
+  
+
 
 
 }

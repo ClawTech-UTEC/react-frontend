@@ -12,6 +12,7 @@ import InformationDiolog from './InformationDiolog';
 import ConfirmationDiolog from './ConfirmationDiolog';
 import TablaProductosPedido from './Comons/TablaProductosPedido';
 import BotonesDetallePedido from './Comons/BotonesDetallePedido';
+import BackgroundGrid from './Comons/BackgroundGrid';
 
 const DetallePedido = () => {
     const initialValue = 0;
@@ -65,8 +66,8 @@ const DetallePedido = () => {
             , { state: pedido });
     }
     return (
-        <div className='background'>
-            <Container fixed>
+        <>
+            <BackgroundGrid >
                 <Grid container spacing={2} align="center">
                     <Grid item xs={12}>
                         <Typography variant='h5' className='titulo1'>
@@ -114,10 +115,10 @@ const DetallePedido = () => {
 
                     </Grid>
                 </Grid>
-            </Container>
+            </BackgroundGrid>
             <ConfirmationDiolog open={openCancelarConfirmation} title="Confirmar" descripcion="¿Acepta cancelar la pedido?" onNoAccept={() => setOpenCancelarConfirmation(false)} onAccept={() => onCancelarPedido} ></ConfirmationDiolog>
             <InformationDiolog open={openInformation} title="Pedido Cancelada con Exito" onAccept={onVolver}></InformationDiolog>
-        </div>
+        </>
     );
 }
 export default DetallePedido;
