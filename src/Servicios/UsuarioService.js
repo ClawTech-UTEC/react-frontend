@@ -23,7 +23,7 @@ const usuarioService = {
 
     */
     login: (email, password, errorFunction) => {
-        var loginRequest = new Object();
+        var loginRequest = {};
         loginRequest.email = email;
         loginRequest.password = password;
         axios.post(
