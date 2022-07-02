@@ -53,6 +53,7 @@ function App() {
         <Route path="/add-prov" element={<CreateProvComp />}></Route>
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
         <Route path="/recepciones" element={<RecepcionesTable />}></Route>
+        <Route path="/add-tipoProd" element={<TipoProdComp />}></Route>
         <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
         <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
         <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
