@@ -31,6 +31,7 @@ import ControlarPedido from './Components/ControlarPedido';
 import DespacharPedido from './Components/DespacharPedido';
 import EntregarPedido from './Components/EntregarPedido';
 import DevolverPedido from './Components/DevolverPedido';
+import Deposito from './Components/Deposito';
 
 
 
@@ -64,8 +65,7 @@ function App() {
         <Route path="/entregarPedido" element={<EntregarPedido />}></Route>
         <Route path="/devolverPedido" element={<DevolverPedido />}></Route>
         <Route path="/stock" element={<StockTable />}></Route>
-
-
+        <Route path="/deposito" element={<Deposito />}></Route>
 
       </Routes>
 

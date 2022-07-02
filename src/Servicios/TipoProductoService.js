@@ -28,6 +28,18 @@ const tipoProductoService = {
         ).then(response => response);
 
 
+    },
+    getProductos: () => {
+        return axios.post(
+            `${apiBaseUrl}/tipoProductos/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            },
+        ).then(response => response);
+
+
     }
 
 

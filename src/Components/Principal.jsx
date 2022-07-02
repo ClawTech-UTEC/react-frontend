@@ -68,6 +68,37 @@ function Principal() {
         )
     }
 
+    const prediccion = [
+        {
+            mes: 7,
+            facturacion: 33769
+        },
+        {
+            mes: 8,
+            facturacion: 29059
+
+        }, {
+            mes: 9,
+            facturacion: 35788
+
+        }, {
+            mes: 10,
+            facturacion: 25640
+
+        }, {
+            mes: 11,
+            facturacion: 32769
+
+        }, {
+            mes: 12,
+            facturacion: 36769
+
+        },
+    ]
+
+
+
+
 
     return (
         <div className='background'>
@@ -156,12 +187,12 @@ function Principal() {
                     <Card variant="outlined">
                         <CardContent>
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
-                                Proyeccion Ventas Proximos 6 Meses
+                                Proyeccion Facturacion Proximos 6 Meses
                             </Typography>
                             <ResponsiveContainer width={400} height={300}>
                                 <LineChart
                                     tickFormatter={dateFormatter}
-                                    data={reporteAnualPedidos}
+                                    data={prediccion}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                                 >
                                     <Legend />
@@ -169,7 +200,7 @@ function Principal() {
                                     <XAxis dataKey="mes" tickFormatter={dateFormatter} />
                                     <YAxis />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="cantidad" stroke="#ff7300" yAxisId={0} />
+                                    <Line type="monotone" dataKey="facturacion" stroke="#ff7300" yAxisId={0} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </CardContent>

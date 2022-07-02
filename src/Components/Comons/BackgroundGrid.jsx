@@ -1,7 +1,7 @@
 import { Container, Grid } from '@material-ui/core'
 import React from 'react'
 
-export default function BackgroundGrid({ children }) {
+export default function BackgroundGrid({ children, spacing }) {
     return (
         <div className='background'>
             <Container fixed>
@@ -9,7 +9,7 @@ export default function BackgroundGrid({ children }) {
 
                 <Grid
                     container
-                    spacing={0}
+                    spacing={spacing}
                     align="center"
                     
                 >

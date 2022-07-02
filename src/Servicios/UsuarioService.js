@@ -62,12 +62,12 @@ const usuarioService = {
         formData.append('nombre', nombre);
         formData.append('apellido', apellido);
         axios.post(
-            apiBaseUrl + "/register", formData, { 
-               
-                'Content-Type': 'multipart/form-data'
+            apiBaseUrl + "/register", formData, {
+
+            'Content-Type': 'multipart/form-data'
 
 
-            }
+        }
         ).then(response => {
             if (response.status === 200) {
 
@@ -84,6 +84,16 @@ const usuarioService = {
                 errorFunction("Error desconocido");
             }
         });
+    },
+
+    getUsuario: () => {
+        return axios.post(
+            apiBaseUrl + "/usuarios", {
+            'Content-Type': 'multipart/form-data'
+        }
+        ).then(response => {
+
+        })
     }
 
 }

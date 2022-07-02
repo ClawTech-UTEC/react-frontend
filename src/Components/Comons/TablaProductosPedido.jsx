@@ -22,7 +22,6 @@ const TablaProductosPedido = ({ xs, md, productosAgregados }) => {
                                     key={producto.producto.idTipoProd}
                                     sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                 >
-
                                     <TableCell align="center">{producto.producto.nombre}</TableCell>
                                     <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
                                     <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
