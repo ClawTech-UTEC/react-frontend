@@ -288,7 +288,7 @@ function TipoProdComp() {
             {results.map(tipoProd => {
               return (
                 <tr key={tipoProd.idTipoProd}>
-                  <td>{tipoProd.idtipoProd}</td>
+                  <td>{tipoProd.idTipoProd}</td>
                   <td>{tipoProd.codigoDeBarras}</td>
                   <td>{tipoProd.nombre}</td>
                   <td>{tipoProd.categoria}</td>
