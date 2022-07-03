@@ -125,3 +125,8 @@
 .table{
   background-color: white;
 }
+
+
+.overIndex{
+  z-index: 1;
+}
