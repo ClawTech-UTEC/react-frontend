@@ -261,7 +261,7 @@ function TipoProdComp() {
   return (
     <div className="App">
       <div className="caja1">
-        <h2 className='titulo2'>Lista de tipoProds</h2>
+        {/* <h2 className='titulo2'>Lista de tipoProds</h2>
         <div className='buscador'>
           <input value={search} type="text" onChange={searcher} placeholder='buscar por nombre' className='form-control' />
         </div>
@@ -324,7 +324,7 @@ function TipoProdComp() {
           onClose={abrirCerrarModalEliminar}>
           {bodyEliminar}
         </Modal>
-
+ */}
 
       </div>
 
