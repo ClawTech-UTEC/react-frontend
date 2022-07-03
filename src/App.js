@@ -16,7 +16,7 @@ import CreateCategoriaComp from './Components/CreateCategoriaComp';
 import RecepcionesTable from './Components/RecepcionesTable';
 import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
-import { useJwt } from "react-jwt";
+ import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
 
 import TipoProdComp from './Components/TipoProdComp';
@@ -38,7 +38,7 @@ import Deposito from './Components/Deposito';
 function App() {
 
 
-  const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
+   const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
 
   return (
     <BrowserRouter>
