@@ -8,7 +8,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm i --legacy-peer-deps'
-        sh 'npm run build'
+        sh 'CI='' npm run build'
       }
     }
     stage('Deploy') {
