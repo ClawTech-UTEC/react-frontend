@@ -9,7 +9,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm i --legacy-peer-deps'
-        sh 'npm run build --verbose'
+        sh 'npm run build --verbose' 
       }
     }
     stage('Deploy') {
