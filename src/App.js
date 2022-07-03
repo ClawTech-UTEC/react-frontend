@@ -41,7 +41,7 @@ function App() {
    const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
 
   return (
-    <BrowserRouter>
+    <BrowserRouter id="router">
       {isExpired ? <div /> : <NavBar />}
       <Routes>
         <Route path="/" element={isExpired ? <Login /> : <Principal />}></Route>
