@@ -42,11 +42,7 @@ function App() {
 
   return (
     <BrowserRouter>
-
-
-
       {isExpired ? <div /> : <NavBar />}
-
       <Routes>
         <Route path="/" element={isExpired ? <Login /> : <Principal />}></Route>
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
