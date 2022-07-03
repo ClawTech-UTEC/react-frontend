@@ -62,6 +62,11 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   
-
+  {
+    title: 'Deposito',
+    path: '/deposito',
+    icon: <FaIcons.FaWarehouse />,
+    cName: 'nav-text'
+  },
    
 ];

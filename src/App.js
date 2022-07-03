@@ -32,6 +32,7 @@ import DespacharPedido from './Components/DespacharPedido';
 import EntregarPedido from './Components/EntregarPedido';
 import DevolverPedido from './Components/DevolverPedido';
 import Deposito from './Components/Deposito';
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 
 
@@ -39,8 +40,16 @@ function App() {
 
 
   const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
-
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#0d6efd'
+      }
+    }
+  });
   return (
+    <MuiThemeProvider theme={theme}>
+
     <BrowserRouter>
 
 
@@ -73,6 +82,8 @@ function App() {
 
 
     </BrowserRouter>
+    </MuiThemeProvider>
+
   );
 }
 

@@ -11,6 +11,11 @@
   color: white;
 }
 
+.navbar{
+  min-height: 12vh;
+ 
+}
+
 .App-link {
   color: #61dafb;
 }

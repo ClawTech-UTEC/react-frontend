@@ -8,8 +8,14 @@ import { Table } from 'reactstrap';
 import { depositoService } from '../Servicios/DepositoService';
 import tipoProductoService from '../Servicios/TipoProductoService';
 import BackgroundGrid from './Comons/BackgroundGrid';
-import { Autocomplete, Alert } from '@mui/material';
+import { Autocomplete, Alert, ListItemIcon } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import { blue } from '@material-ui/core/colors';
+
+
+
+
 
 const Deposito = () => {
 
@@ -29,31 +35,30 @@ const Deposito = () => {
         setOpen(false);
     };
 
-    const quitarProducto = (producto) => {
-        
-        espacioSeleccionado.productos = espacioSeleccionado.productos.filter(p => p !== producto); 
-        console.log(espacioSeleccionado.productos);
-        setEspacioSeleccionado(espacioSeleccionado)
-        console.log(espacioSeleccionado)
+    const quitarProducto = (espacio, producto) => {
+        console.log(espacio)
+        let espacioActualizado = espacio
 
+        espacioActualizado.productos = espacio.productos.filter(p => p.idTipoProd !== producto.idTipoProd);
+        setEspacioSeleccionado(espacioActualizado)
         alert("Producto eliminado")
+        handleClose();
 
     };
 
     const agregarProducto = () => {
-      if (espacioSeleccionado.productos.filter(p => p.idTipoProd === productosSeleccionado.idTipoProd).length !== 0) {
+        let espacioActualizado = espacioSeleccionado;
+
+        if (espacioSeleccionado.productos.filter(p => p.idTipoProd === productosSeleccionado.idTipoProd).length !== 0) {
             console.log("agregarProducto");
             alert("El producto ya se encuentra en el espacio");
             return
         }
 
-        espacioSeleccionado.productos.push(productosSeleccionado)
-        setEspacioSeleccionado(espacioSeleccionado)
-        console.log(espacioSeleccionado)
-        setEspacioSeleccionado(espacioSeleccionado)
-
+        espacioActualizado.productos.push(productosSeleccionado)
+        setEspacioSeleccionado(espacioActualizado)
         alert("Producto agregado")
-        document.getElementById("combo-box-demo").value = "";
+        handleClose();
 
     }
     useEffect(() => {
@@ -89,19 +94,56 @@ const Deposito = () => {
     const cargarProductos = (productos) => {
         setProductos(productos)
     }
-    const tablaPasillos = () => {
+
+    const tableRow = (espacio) => {
+        return <TableRow
+            key={espacio.nomEspacio}
+            sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
+        >
+            <TableCell align="center">{espacio.idEsp}</TableCell>
+            <TableCell align="center">
+
+                <List >
+                    {espacio.productos.map((producto) => (
+                        <ListItem>
+                            <ListItemText
+                                primary={producto.nombre}>
+                            </ListItemText>
+                            <ListItemAvatar onClick={(event, value) => quitarProducto(espacio, producto)} sx={{ bgcolor: blue }} >
+                                <Avatar >
+                                    <DeleteIcon color='white' />
+                                </Avatar>
+                            </ListItemAvatar>
+
+                        </ListItem>
+                    ))}
+                </List>
+                <ListItemIcon onClick={(event, value) => handleClickOpen(espacio)}>
+                    <AddIcon color='primary' />
+                    <ListItemText primary="Agregar Producto" />
+                </ListItemIcon>
+            </TableCell>
+
+
+        </TableRow>
+    }
+
+
+
+
+    const tablaPasillos = (pasillos) => {
         if (deposito === null || deposito === undefined) {
             console.log("no hay deposito ");
             return <div>No hay pasillos</div>
         }
-        if (deposito.pasillos === undefined || deposito.pasillos === null) {
+        if (pasillos === undefined || pasillos === null) {
             console.log("no hay pasillo");
             return <div>No hay pasillos</div>
         }
         else {
             console.log("deposito ");
             console.log(deposito.pasillos);
-            return deposito.pasillos.map((pasillo) => (
+            return pasillos.map((pasillo) => (
                 <Grid item xs={3} >
                     <TableContainer className='table'>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -118,31 +160,13 @@ const Deposito = () => {
                             </TableHead>
                             <TableBody>
                                 {pasillo.espacio.map((espacio) => (
-                                    <TableRow onClick={() => handleClickOpen(espacio)}
-                                        key={espacio.nomEspacio}
-                                        sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
-                                    >
-                                        <TableCell align="center">{espacio.idEsp}</TableCell>
-                                        <TableCell align="center">
-
-                                            <List >
-                                                {espacio.productos.map((producto) => (
-                                                    <ListItem>
-                                                        <ListItemText
-                                                            primary={producto.nombre}>
-                                                        </ListItemText>
-
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                        </TableCell>
-
-
-                                    </TableRow>
+                                    tableRow(espacio)
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
+
+
                 </Grid>
             ))
         }
@@ -170,9 +194,20 @@ const Deposito = () => {
                 </Grid>
                 <Grid item xs={3}>
                 </Grid>
-                {tablaPasillos()}
+                {tablaPasillos(deposito.pasillos)}
                 <Grid item xs={3}>
                 </Grid>
+
+
+
+                <Grid item xs={12}>
+                    <Button onClick={onGuardar} variant="contained" color="primary">
+                        Guardar
+                    </Button>
+                </Grid>
+
+
+
             </BackgroundGrid>
 
 
@@ -182,25 +217,10 @@ const Deposito = () => {
                 espacioSeleccionado ? <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Productos</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            <List >
-                                {espacioSeleccionado.productos.map((producto) => (
-                                    <ListItem >
-                                        <ListItemText
-                                            primary={producto.nombre}>
-                                        </ListItemText>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <DeleteIcon onClick={(event,  value ) => quitarProducto(producto)}/>
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </DialogContentText>
+
 
                         Agregar Producto
-                      
+
                         <Autocomplete
                             disablePortal
                             id="combo-box-demo"
@@ -209,16 +229,14 @@ const Deposito = () => {
                             getOptionLabel={(option) => option.nombre || ""}
                             renderInput={(params) => <TextField {...params} label="Producto" />}
                         />
-                        <Button onClick={agregarProducto} color="primary">
-                            Agregar
-                        </Button>
+
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleClose} variant="contained" color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={onGuardar} color="primary">
-                            Guardar
+                        <Button onClick={agregarProducto} variant="contained" color="primary">
+                            Agregar
                         </Button>
                     </DialogActions>
                 </Dialog> : <></>}</>
