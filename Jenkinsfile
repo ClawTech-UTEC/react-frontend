@@ -4,9 +4,7 @@ pipeline {
             label 'ubuntu-2004'
         }
     }
-     tools {
-        node 'node'
-    }
+    
     
   stages {
     stage('Build') {
