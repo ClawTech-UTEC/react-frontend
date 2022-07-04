@@ -84,6 +84,7 @@ export default function RecepcionesTable(props) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                
                                 {filteredRecepciones.map((recepcion) => (
                                     <TableRow
                                         onClick={() => navigate('/detalleRecepcion', {
@@ -95,8 +96,8 @@ export default function RecepcionesTable(props) {
                                     >
                                         <TableCell align="center">{recepcion.idRecepcion}</TableCell>
                                         <TableCell align="center">{recepcion.provedor.nombreProv}</TableCell>
-                                        <TableCell align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado}</TableCell>
-                                        <TableCell align="center">{recepcion.estadoRecepcion[0].usuario.nombre}</TableCell>
+                                        <TableCell align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1]?.tipoEstado}</TableCell>
+                                        <TableCell align="center">{recepcion.estadoRecepcion[0]?.usuario.nombre}</TableCell>
                                         <TableCell align="center">{moment(new Date(recepcion.fechaRecepcion)).format('D/M/YY')}</TableCell>
                                     </TableRow>
                                 ))}

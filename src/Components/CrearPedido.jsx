@@ -234,7 +234,8 @@ const CrearPedido = () => {
                 value={searched} onChange={(searchVal) => onSearch(searchVal)}
                 onCancelSearch={() => cancelSearch()}
             />
-            <Grid item xs={12} component="paper">
+            <Grid item xs={12} />
+            <Grid item xs={12} component="Paper">
                 <Paper container className='formPaperContainer' >
                     <Box component="form" noValidate onSubmit={formikProductos.handleSubmit}>
                         <Autocomplete
@@ -247,6 +248,9 @@ const CrearPedido = () => {
                             error={formikProductos.touched.tipoProducto && Boolean(formikProductos.errors.tipoProducto)}
                             renderInput={(params) => <TextField {...params} label="Producto" />}
                         />
+                        <Grid item xs={12} >
+                           
+                            </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth

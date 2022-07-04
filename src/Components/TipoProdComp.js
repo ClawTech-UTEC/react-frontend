@@ -5,7 +5,7 @@ import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-const url = 'http://localhost:8081/api/tipoProductos/';
+const url = 'apiBaseUrl /api/tipoProductos/';
 const url2 = 'http://localhost:8081/api/categoria/';
 const url3 = 'http://localhost:8081/api/subCat/';
 

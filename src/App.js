@@ -57,7 +57,7 @@ function App() {
       {isExpired ? <div /> : <NavBar />}
 
       <Routes>
-        <Route path="/" element={isExpired ? <Login /> : <Principal />}></Route>
+        <Route path="/" element={!isExpired ? <Principal />  : <Login />}></Route>
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
         <Route path="/add-prov" element={<CreateProvComp />}></Route>
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
