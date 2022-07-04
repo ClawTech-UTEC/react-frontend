@@ -16,7 +16,7 @@ import CreateCategoriaComp from './Components/CreateCategoriaComp';
 import RecepcionesTable from './Components/RecepcionesTable';
 import CreateRecepcion from './Components/CreateRecepcion';
 import Login from './Components/Login';
-import { useJwt } from "react-jwt";
+ import { useJwt } from "react-jwt";
 import DetalleRecepcion from './Components/DetalleRecepcion';
 
 import TipoProdComp from './Components/TipoProdComp';
@@ -55,7 +55,6 @@ function App() {
 
 
       {isExpired ? <div /> : <NavBar />}
-
       <Routes>
         <Route path="/" element={!isExpired ? <Principal />  : <Login />}></Route>
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
