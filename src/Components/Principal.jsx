@@ -18,19 +18,16 @@ function Principal() {
 
         pedidosService.getReportePedidoAnual(2022).then(response => {
 
-            console.log(response.data);
             cargarReportePedidos(response.data);
 
         });
 
         recepcionService.getReporteRecepcionesAnual(2022).then(response => {
-            console.log(response.data);
 
             cargarReporteRecepcion(response.data);
         });
 
         tipoProductoService.getProductosMasVendidos(2022).then(response => {
-            console.log(response.data);
             cargarReporteProductosMasVendidos(response.data);
         });
 
