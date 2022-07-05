@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { apiBaseUrl } from '../constants/constants';
 
-const PROV_API = "http://localhost:8081/api/prov";
+const PROV_API = apiBaseUrl + "/prov";
 class ProvService{
 
     getProvs(){

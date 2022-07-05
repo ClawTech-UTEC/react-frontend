@@ -33,6 +33,7 @@ import EntregarPedido from './Components/EntregarPedido';
 import DevolverPedido from './Components/DevolverPedido';
 import Deposito from './Components/Deposito';
 import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { useState } from 'react';
 
 
 
@@ -40,6 +41,7 @@ function App() {
 
 
   const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
+  const [logged, setLogged] = useState(!isExpired)
   const theme = createTheme({
     palette: {
       primary: {
@@ -54,9 +56,9 @@ function App() {
 
 
 
-      {isExpired ? <div /> : <NavBar />}
+        {!logged ? <div /> : <NavBar setLogged={setLogged} />}
       <Routes>
-        <Route path="/" element={!isExpired ? <Principal />  : <Login />}></Route>
+          <Route path="/" element={logged ? <Principal /> : <Login setLogged= {setLogged }/>}></Route>
         <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
         <Route path="/add-prov" element={<CreateProvComp />}></Route>
         <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>

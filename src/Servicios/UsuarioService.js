@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { apiBaseUrl } from "../constants/constants";
 
 
@@ -26,30 +27,13 @@ const usuarioService = {
         var loginRequest = {};
         loginRequest.email = email;
         loginRequest.password = password;
-        axios.post(
+       return axios.post(
             apiBaseUrl + "/login", loginRequest, {
             headers: {
                 'Content-Type': 'application/json',
             },
         }
-        ).then(response => {
-            if (response.status === 200) {
-                localStorage.setItem('jwt', response.data.jwt);
-                localStorage.setItem('email', response.data.email);
-                localStorage.setItem('idUsuario', response.data.idUsuario);
-                window.location.replace(apiBaseUrl + "/");
-
-            }
-        }).catch(error => {
-            console.log(error);
-            if (error.response.status === 401 || error.response.status === 403) {
-                errorFunction("Email o password incorrectos");
-            } else if (error.response.status === 500) {
-                errorFunction("No se pudo conectar con el servidor");
-            } else {
-                errorFunction("Error desconocido");
-            }
-        });
+        )
     },
 
 
@@ -61,29 +45,14 @@ const usuarioService = {
         formData.append('password', password);
         formData.append('nombre', nombre);
         formData.append('apellido', apellido);
-        axios.post(
+        return axios.post(
             apiBaseUrl + "/register", formData, {
 
             'Content-Type': 'multipart/form-data'
 
 
         }
-        ).then(response => {
-            if (response.status === 200) {
-
-                window.location.replace(apiBaseUrl + "/");
-                volverAlLogin();
-            }
-        }).catch(error => {
-            console.log(error);
-            if (error.response.status === 400) {
-                errorFunction("Email ya existe");
-            } else if (error.response.status === 500) {
-                errorFunction("No se pudo conectar con el servidor");
-            } else {
-                errorFunction("Error desconocido");
-            }
-        });
+        )
     },
 
     getUsuario: () => {

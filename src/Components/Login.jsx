@@ -8,11 +8,13 @@ import { usuarioService } from '../Servicios/UsuarioService';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Registrarse from './Registrarse';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({setLogged}) => {
 
 
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     //aqui controlamos si se muestra el formulario dde registro o el de login
     const [mostrarRegistrarse, setMostrarRegistrarse] = useState(false);
@@ -51,7 +53,25 @@ const Login = () => {
                 password: values.password,
             });
 
-            usuarioService.login(values.email, values.password, setError);
+            usuarioService.login(values.email, values.password, setError).then(response => {
+                if (response.status === 200) {
+                    localStorage.setItem('jwt', response.data.jwt);
+                    localStorage.setItem('email', response.data.email);
+                    localStorage.setItem('idUsuario', response.data.idUsuario);
+                    setLogged(true)
+                    navigate("/");
+
+                }
+            }).catch(error => {
+                console.log(error);
+                if (error.response.status === 401 || error.response.status === 403) {
+                    setError("Email o password incorrectos");
+                } else if (error.response.status === 500) {
+                    setError("No se pudo conectar con el servidor");
+                } else {
+                    setError("Error desconocido");
+                }
+            });
 
 
         },

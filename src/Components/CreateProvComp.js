@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { apiBaseUrl } from '../constants/constants';
 
-const url = apiBaseUrl + '/api/prov/';
+const url = apiBaseUrl + '/prov/';
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',

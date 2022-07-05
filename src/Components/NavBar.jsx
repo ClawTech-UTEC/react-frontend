@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
+import { useJwt } from 'react-jwt';
 
-function Navbar() {
+function Navbar({ setLogged }) {
   const [sidebar, setSidebar] = useState(false);
+  const navigate = useNavigate();
+
 
   const showSidebar = () => setSidebar(!sidebar);
   const logout = () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('email');
     localStorage.removeItem('idUsuario');
-    window.location.reload(false);
+   
+    setLogged(false)
+    navigate('/')
   }
   return (
     <>

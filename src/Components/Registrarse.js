@@ -44,7 +44,24 @@ const Registrarse = (props) => {
                 apellido: values.apellido,
                 
             });
-            usuarioService.registrarse(values.email, values.password, values.nombre, values.apellido, setError, props.volverLogin);
+            usuarioService.registrarse(values.email, values.password, values.nombre, values.apellido, setError, ).then(response => {
+                if (response.status === 200) {
+
+                    // window.location.replace(apiBaseUrl + "/");
+                    props.volverLogin();
+                }
+                
+            }).catch(error => {
+                console.log(error);
+                if (error.response.status === 400) {
+                    setError("Email ya existe");
+                } else if (error.response.status === 500) {
+                    setError("No se pudo conectar con el servidor");
+                } else {
+                    setError("Error desconocido");
+                }
+                console.log(error)
+            });
         },
     });
     return (
@@ -129,7 +146,7 @@ const Registrarse = (props) => {
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >
-                                Ingresar
+                                Registrarse
                             </Button>
 
 
