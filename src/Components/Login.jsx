@@ -96,9 +96,9 @@ const Login = ({setLogged}) => {
                             <div className='centeredDiv'>
                                 <img className='imageLogo' src={logo} alt="logo clawtech"></img>
                             </div >
-                            <Typography component="h1" variant="h5">
+                            <h2  className='loginTitle'>
                                 Login
-                            </Typography>
+                            </h2>
                             <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
 
 

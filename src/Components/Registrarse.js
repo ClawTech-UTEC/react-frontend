@@ -79,9 +79,9 @@ const Registrarse = (props) => {
                         <div className='centeredDiv'>
                             <img className='imageLogo' src={logo} alt="logo clawtech"></img>
                         </div >
-                        <Typography component="h1" variant="h5">
+                    <h2 className='loginTitle'  >
                             Registrarse
-                        </Typography>
+                        </h2>
                         <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
 
 
@@ -142,6 +142,7 @@ const Registrarse = (props) => {
                             <Button
                                 type="submit"
                                 color='primary'
+                                
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}

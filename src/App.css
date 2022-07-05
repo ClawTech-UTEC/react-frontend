@@ -108,12 +108,49 @@
   text-align: center;
 }
 
+
+.tableHead{
+
+  background-color: #e57373;
+  color: white;
+}
+
+.searchbar{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+
+.tableHead th{
+  color: white;
+  font-weight: bold;
+}
+
+th{
+  text-align: center;
+    font-weight: normal;
+
+}
+
 .botonSalir{
   margin: 20px;
   text-align: right;
   color: white;
 }	
 
+
+.loginTitle{
+  font-family: 'Ceviche One', cursive;
+  font-size: 50px;
+  
+  color: gray;
+    text-decoration: underline;
+
+}
 
 .formPaperContainer{
  

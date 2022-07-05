@@ -1,11 +1,12 @@
-import { Grid, Paper, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Grid, Paper, Button, table, tbody, th, tableContainer, tableHead, thead, Container } from '@material-ui/core';
 import SearchBar from 'material-ui-search-bar';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { stockService } from '../Servicios/StockService';
+import { withStyles } from '@mui/material';
 
-export default function StockTable() {
+export default function Stocktable() {
 
     const [productos, setproductos] = useState([]);
     const [filteredProductos, setFilteredProductos] = useState([]);
@@ -25,7 +26,7 @@ export default function StockTable() {
         setFilteredProductos(productos)
     }
 
-
+    
     const requestSearch = (searchedVal) => {
         const filteredRows = productos.filter((producto) => {
             return producto.idProd.toString().toLowerCase().includes(searchedVal.toLowerCase()) ||
@@ -41,11 +42,16 @@ export default function StockTable() {
         requestSearch(searched);
     };
     return (
-        <div className='background'>
+        <div >
+            <Container maxWidth="md">
+              
+           
             <Grid container spacing={3}>
-                <Grid item xs={9}>
-                    <SearchBar
-                        value={searched}
+                <Grid item xs={12}>
+                        <h2 className='titulo2'>Stock de productos</h2>
+
+                        <SearchBar className='searchbar'
+                        value={searched} placeholder="Buscar"
                         onChange={(searchVal) => requestSearch(searchVal)}
                         onCancelSearch={() => cancelSearch()}
                     />
@@ -56,43 +62,42 @@ export default function StockTable() {
                 </Grid>
                 <Grid item xs={12}>
 
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center">Id Producto</TableCell>
-                                    <TableCell align="center">Nombre Producto</TableCell>
-                                    <TableCell align="center">Codigo de Barras</TableCell>
-                                    <TableCell align="center">Cantidad Disponible</TableCell>
-                                    <TableCell align="center">Cantidad Reservada</TableCell>
-                                    <TableCell align="center">Cantidad En Cuarentena</TableCell>
+                        <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
+                                <thead className="tableHead">
+                                    <tr>
+                                    <th align="center">Id Producto</th>
+                                    <th align="center">Nombre Producto</th>
+                                    <th align="center">Codigo de Barras</th>
+                                    <th align="center">Cantidad Disponible</th>
+                                    <th align="center">Cantidad Reservada</th>
+                                    {/* <th align="center">Cantidad En Cuarentena</th> */}
 
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
+                                    </tr>
+                                </thead>
+                            <tbody>
                                 {filteredProductos.map((producto) => (
-                                    <TableRow
+                                    <tr
                                       
 
                                         key={producto.idproducto}
                                         sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                     >
-                                        <TableCell align="center">{producto.idProd}</TableCell>
-                                        <TableCell align="center">{producto.tipoProducto.nombre}</TableCell>
-                                        <TableCell align="center">{producto.tipoProducto.codigoDeBarras}</TableCell>
-                                        <TableCell align="center">{producto.cantidadDisponible}</TableCell>
-                                        <TableCell align="center">{producto.cantidadReservada}</TableCell>
-                                        <TableCell align="center">{producto.cantidadEnCuarentena}</TableCell>
+                                        <th align="center">{producto.idProd}</th>
+                                        <th align="center">{producto.tipoProducto.nombre}</th>
+                                        <th align="center">{producto.tipoProducto.codigoDeBarras}</th>
+                                        <th align="center">{producto.cantidadDisponible}</th>
+                                        <th align="center">{producto.cantidadReservada}</th>
+                                        {/* <th align="center">{producto.cantidadEnCuarentena}</th> */}
 
-                                    </TableRow>
+                                    </tr>
                                 ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                            </tbody>
+                        </table>
+                    
                 </Grid>
 
             </Grid>
-
+ </Container>
         </div>
     )
 }

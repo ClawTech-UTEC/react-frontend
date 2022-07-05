@@ -1,9 +1,10 @@
-import { Grid, Paper, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Grid, Paper, Button, Table, tbody, th, TableContainer, thead, tr } from '@material-ui/core';
 import SearchBar from 'material-ui-search-bar';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { pedidosService } from '../Servicios/PedidosService';
 import moment from 'moment';
+import { Container } from '@mui/material';
 
 export default function PedidosTable() {
 
@@ -42,37 +43,40 @@ export default function PedidosTable() {
         requestSearch(searched);
     };
     return (
-        <div className='background'>
+        <div >
+            <Container maxWidth="md">
+
             <Grid container spacing={3}>
-                <Grid item xs={9}>
-                    <SearchBar
-                        value={searched}
+                <Grid item xs={12}>
+                        <h2 className='titulo2'>Recepciones</h2>
+
+                    <SearchBar className='searchbar'
+                        value={searched} placeholder='Buscar'
                         onChange={(searchVal) => requestSearch(searchVal)}
                         onCancelSearch={() => cancelSearch()}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <Link to="/crearPedido">
-                        <Button variant="contained" color="primary" align="center">Crear Nuevo Pedido</Button>
+                    <Grid item xs={12} > 
+                        <Link to="/crearPedido">
+                            <Button  variant="contained" color="primary" align="center">Crear Nuevo Pedido</Button>
                     </Link>
 
                 </Grid>
                 <Grid item xs={12}>
 
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center">Id Pedido</TableCell>
-                                    <TableCell align="center">Cliente</TableCell>
-                                    <TableCell align="center">Estado Pedido</TableCell>
-                                    <TableCell align="center">Creado Por</TableCell>
-                                    <TableCell align="center">Fecha Pedido</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
+                        <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
+                            <thead className="tableHead">
+                                <tr>
+                                    <th align="center">Id Pedido</th>
+                                    <th align="center">Cliente</th>
+                                    <th align="center">Estado Pedido</th>
+                                    <th align="center">Creado Por</th>
+                                    <th align="center">Fecha Pedido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {filteredPedidos.map((pedido) => (
-                                    <TableRow
+                                    <tr
                                         onClick={() => navigate('/detallePedido', {
                                             state: pedido // your data array of objects
                                         })}
@@ -80,19 +84,19 @@ export default function PedidosTable() {
                                         key={pedido.idPedido}
                                         sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                     >
-                                        <TableCell align="center">{pedido.idPedido}</TableCell>
-                                        <TableCell align="center">{pedido.cliente.nombre}</TableCell>
-                                        <TableCell align="center">{pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}</TableCell>
-                                        <TableCell align="center">{pedido.estadoPedido[0].usuario.nombre}</TableCell>
-                                        <TableCell align="center">{moment(new Date(pedido.fechaPedido)).format('D/M/YY')}</TableCell>
-                                    </TableRow>
+                                        <th align="center">{pedido.idPedido}</th>
+                                        <th align="center">{pedido.cliente.nombre}</th>
+                                        <th align="center">{pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}</th>
+                                        <th align="center">{pedido.estadoPedido[0].usuario.nombre}</th>
+                                        <th align="center">{moment(new Date(pedido.fechaPedido)).format('D/M/YY')}</th>
+                                    </tr>
                                 ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                            </tbody>
+                        </table>
                 </Grid>
 
             </Grid>
+            </Container>
 
         </div>
     )

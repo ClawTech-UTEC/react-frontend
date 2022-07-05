@@ -268,11 +268,12 @@ const CrearPedido = () => {
                             }
 
                         </Grid>
-                        <Button color='primary'
-                            
-                            variant="contained" align="center" type="submit">
-                            Agregar Prodcuto
-                        </Button>
+                            <Button color='primary'
+
+                               align="center" type="submit">
+                                Agregar Prodcuto
+                            </Button>
+                        
                         {errorAgregarProductos ?
                             <Alert severity="error"> {errorAgregarProductos}</Alert> : <div />
                         }
@@ -387,7 +388,7 @@ const CrearPedido = () => {
                         />
                         <Button 
                             
-                            variant="contained"  color="primary" align="center" type="submit">
+                              color="primary" align="center" type="submit">
                             Crear Pedido
                         </Button>
                         {errorGeneral ?

@@ -5,10 +5,8 @@
 import React, { useState } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
 import recepcionService from '../Servicios/RecepcionService';
@@ -19,13 +17,14 @@ import SearchBar from "material-ui-search-bar";
 import { Link } from "react-router-dom";
 
 import { useNavigate } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 
 export default function RecepcionesTable(props) {
     const [recepciones, setRecepciones] = useState([]);
     const [filteredRecepciones, setfilteredRecepciones] = useState([]);
     const navigate = useNavigate();
     const [searched, setSearched] = useState("");
-   
+
     useEffect(() => {
         let ignore = false;
         recepcionService.getRecepciones().then(response => {
@@ -36,7 +35,7 @@ export default function RecepcionesTable(props) {
     }, []);
     const cargarRecepciones = (recepciones) => {
         setRecepciones(recepciones)
-         setfilteredRecepciones(recepciones)
+        setfilteredRecepciones(recepciones)
     }
     const requestSearch = (searchedVal) => {
         const filteredRows = recepciones.filter((row) => {
@@ -55,38 +54,44 @@ export default function RecepcionesTable(props) {
         requestSearch(searched);
     };
     return (
-        <div className='background'>
-            <Grid container spacing={3}>
-                <Grid item xs={9}>
-                    <SearchBar
-                        value={searched}
+        <div >
+            <Container maxWidth="md">
+
+            <Grid container spacing={3} >
+                <Grid item xs={12} align="center">
+                        <h2 className='titulo2'>Recepciones</h2>
+
+                    <SearchBar placeholder='Buscar' 
+                        value={searched} className='searchbar'
                         onChange={(searchVal) => requestSearch(searchVal)}
                         onCancelSearch={() => cancelSearch()}
                     />
+
                 </Grid>
-                <Grid item xs={3}>
-                    <Link to="/crearRecepcion">
-                        <Button variant="contained" color="primary" align="center">Crear Nueva Recepcion</Button>
-                    </Link>
-                    
+                <Grid item xs={12}  >
+
+                        <Link to="/crearRecepcion">
+                            <Button variant="contained" color="primary" align="center">Crear Nueva Recepcion</Button>
+                        </Link>
                 </Grid>
+
+
                 <Grid item xs={12}>
 
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center">Id Recepcion</TableCell>
-                                    <TableCell align="center">Proveedor</TableCell>
-                                    <TableCell align="center">Estado Recepcion</TableCell>
-                                    <TableCell align="center">Creado Por</TableCell>
-                                    <TableCell align="center">Fecha Recepcion</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                
+                            <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
+                            <thead className="tableHead">
+                                <tr>
+                                    <th align="center">Id Recepcion</th>
+                                    <th align="center">Proveedor</th>
+                                    <th align="center">Estado Recepcion</th>
+                                    <th align="center">Creado Por</th>
+                                    <th align="center">Fecha Recepcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
                                 {filteredRecepciones.map((recepcion) => (
-                                    <TableRow
+                                    <tr 
                                         onClick={() => navigate('/detalleRecepcion', {
                                             state: recepcion // your data array of objects
                                         })}
@@ -94,19 +99,19 @@ export default function RecepcionesTable(props) {
                                         key={recepcion.idRecepcion}
                                         sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
                                     >
-                                        <TableCell align="center">{recepcion.idRecepcion}</TableCell>
-                                        <TableCell align="center">{recepcion.provedor.nombreProv}</TableCell>
-                                        <TableCell align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1]?.tipoEstado}</TableCell>
-                                        <TableCell align="center">{recepcion.estadoRecepcion[0]?.usuario.nombre}</TableCell>
-                                        <TableCell align="center">{moment(new Date(recepcion.fechaRecepcion)).format('D/M/YY')}</TableCell>
-                                    </TableRow>
+                                        <th align="center">{recepcion.idRecepcion}</th>
+                                        <th align="center">{recepcion.provedor.nombreProv}</th>
+                                        <th align="center">{recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1]?.tipoEstado}</th>
+                                        <th align="center">{recepcion.estadoRecepcion[0]?.usuario.nombre}</th>
+                                        <th align="center">{moment(new Date(recepcion.fechaRecepcion)).format('D/M/YY')}</th>
+                                    </tr>
                                 ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                            </tbody>
+                        </table>
                 </Grid>
 
             </Grid>
+                </Container>
 
         </div>
     );

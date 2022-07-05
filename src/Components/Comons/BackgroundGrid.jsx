@@ -4,7 +4,7 @@ import React from 'react'
 export default function BackgroundGrid({ children, spacing }) {
     return (
         <div className='background'>
-            <Container fixed>
+            <Container maxWidth="md">
 
 
                 <Grid

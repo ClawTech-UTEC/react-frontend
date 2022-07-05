@@ -68,7 +68,7 @@ export default function CreateRecepcion() {
         console.log(value);
         setTipoProducto(value)
     }
-  
+
     const onAgregarProducto = (cantidad) => {
         if (provedor === undefined || provedor === null || tipoProducto === undefined || tipoProducto === null) {
             setErrorAgregarProductos("Debes seleccionar un proveedor y un tipo de producto");
