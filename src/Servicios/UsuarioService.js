@@ -37,7 +37,7 @@ const usuarioService = {
                 localStorage.setItem('jwt', response.data.jwt);
                 localStorage.setItem('email', response.data.email);
                 localStorage.setItem('idUsuario', response.data.idUsuario);
-                window.location.replace("http://localhost:3000/");
+                window.location.replace(apiBaseUrl + "/");
 
             }
         }).catch(error => {
@@ -71,7 +71,7 @@ const usuarioService = {
         ).then(response => {
             if (response.status === 200) {
 
-                window.location.replace("http://localhost:3000/");
+                window.location.replace(apiBaseUrl + "/");
                 volverAlLogin();
             }
         }).catch(error => {
