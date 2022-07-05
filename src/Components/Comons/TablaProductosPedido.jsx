@@ -1,10 +1,10 @@
 import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React from 'react';
 
-const TablaProductosPedido = ({ xs, md, productosAgregados }) => {
+const TablaProductosPedido = ({ xs, md, productosAgregados, component }) => {
     return (
         <>
-            <Grid component={Paper} item xs={xs} md={md} >
+            <Grid component={component} item xs={xs} md={md} >
                 
                 <TableContainer  className='formPaperContainer'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -35,7 +35,7 @@ const TablaProductosPedido = ({ xs, md, productosAgregados }) => {
                     </Table>
                 </TableContainer>
             </Grid>
-            <Grid component={Paper} item xs={12}>
+            <Grid component={component} item xs={12}>
                 <TableContainer  className='formPaperContainer'>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                         <TableHead>

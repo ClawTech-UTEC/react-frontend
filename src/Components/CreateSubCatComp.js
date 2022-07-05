@@ -4,8 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, Button, TextField } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { apiBaseUrl } from '../constants/constants';
 
-const url = 'http://localhost:8081/api/subCat/';
+const url = apiBaseUrl + '/api/subCat/';
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',

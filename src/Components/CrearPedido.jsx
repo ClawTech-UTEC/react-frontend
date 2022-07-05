@@ -227,7 +227,7 @@ const CrearPedido = () => {
     }
 
     return (
-        <BackgroundGrid>
+        <BackgroundGrid spacing={1}>
 
             <Title title="Crear Pedido" />
             <BarCodeReader xs={12} id="searchBar" placeholder="Ingresar Codigo De Barras"
@@ -268,7 +268,9 @@ const CrearPedido = () => {
                             }
 
                         </Grid>
-                        <Button color="primary" align="center" type="submit">
+                        <Button color='primary'
+                            
+                            variant="contained" align="center" type="submit">
                             Agregar Prodcuto
                         </Button>
                         {errorAgregarProductos ?
@@ -282,7 +284,7 @@ const CrearPedido = () => {
             <Title title={"Detalle Pedido"} >
 
             </Title>
-            <TablaProductosPedido xs={12} md={12} productosAgregados={productosAgregados}/>
+            <TablaProductosPedido component={Paper} xs={12} md={12} productosAgregados={productosAgregados}/>
 
 
             
@@ -383,7 +385,9 @@ const CrearPedido = () => {
                             error={formikCliente.touched.email && Boolean(formikCliente.errors.email)}
                             helperText={formikCliente.touched.email && formikCliente.errors.email}
                         />
-                        <Button color="primary" align="center" type="submit">
+                        <Button 
+                            
+                            variant="contained"  color="primary" align="center" type="submit">
                             Crear Pedido
                         </Button>
                         {errorGeneral ?

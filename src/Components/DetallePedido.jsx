@@ -99,7 +99,7 @@ const DetallePedido = () => {
                         <Grid item xs={12}>
                             <Divider variant="middle" />
                         </Grid>
-                        <TablaProductosPedido xs={12} productosAgregados={pedido.productos} />
+                        <TablaProductosPedido component={Paper} xs={12} productosAgregados={pedido.productos} />
                         <BotonesDetallePedido xs={12} estadoPedido={pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}
                             onCancelarPedido={() => setOpenCancelarConfirmation(true)}
                             onPrepararPedido={() => onPrepararPedido()}

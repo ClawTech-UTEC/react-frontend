@@ -93,7 +93,7 @@ export default function DevolverPedido() {
                         <Grid item xs={12}>
                             <Divider variant="middle" />
                         </Grid>
-                        <TablaProductosPedido xs={12} productosAgregados={pedido.productos} />
+                        <TablaProductosPedido component={Paper}  xs={12} productosAgregados={pedido.productos} />
 
                         <Grid item xs={3}>
                         </Grid>

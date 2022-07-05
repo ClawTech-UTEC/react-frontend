@@ -12,6 +12,8 @@ import { Autocomplete, Alert, ListItemIcon } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { blue } from '@material-ui/core/colors';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -109,11 +111,11 @@ const Deposito = () => {
                             <ListItemText
                                 primary={producto.nombre}>
                             </ListItemText>
-                            <ListItemAvatar onClick={(event, value) => quitarProducto(espacio, producto)} sx={{ bgcolor: blue }} >
-                                <Avatar >
-                                    <DeleteIcon color='white' />
-                                </Avatar>
-                            </ListItemAvatar>
+                                
+                              
+                                <button className="btn btn-danger" onClick={(event, value) => quitarProducto(espacio, producto)}><FontAwesomeIcon icon={faTrashAlt} /></button>
+
+                               
 
                         </ListItem>
                     ))}
@@ -214,15 +216,15 @@ const Deposito = () => {
 
 
             {
-                espacioSeleccionado ? <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                espacioSeleccionado ? <Dialog className='dialog' fullWidth maxWidth="sm" maxHeight="sm" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Productos</DialogTitle>
                     <DialogContent>
 
 
                         Agregar Producto
 
-                        <Autocomplete
-                            disablePortal
+                        <Autocomplete className='dialog'
+                            disablePortal autoWidth
                             id="combo-box-demo"
                             options={productos}
                             onChange={(event, value) => setProductosSeleccionado(value)}
@@ -232,9 +234,11 @@ const Deposito = () => {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} variant="contained" color="primary">
+                        <Button  onClick={handleClose} variant="contained" color="primary">
                             Cancel
                         </Button>
+
+
                         <Button onClick={agregarProducto} variant="contained" color="primary">
                             Agregar
                         </Button>

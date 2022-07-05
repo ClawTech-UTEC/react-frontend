@@ -4,10 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, Button, TextField } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { apiBaseUrl } from "../constants/constants";
 
-const url = 'apiBaseUrl /api/tipoProductos/';
-const url2 = 'http://localhost:8081/api/categoria/';
-const url3 = 'http://localhost:8081/api/subCat/';
+const url = apiBaseUrl + "/tipoProductos/";
+const url2 = apiBaseUrl + "/categoria/";
+const url3 = apiBaseUrl +  "/subCat/";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -69,54 +70,84 @@ function TipoProdComp() {
         const regex = new RegExp(`${text}`, 'gi');
         return dt2.nombre.match(regex)
       })
+
+     
     }
     console.log('matches', matches)
     setSeuggestions(matches)
     setText(text)
+  
   }
 
   const onSuggestHandler = (text) => {
 
-    setText(text);
+    setText(text.nombre);
     setSeuggestions([]);
+   
+        setTipoProdSelectSelect(prevState => ({
+          ...prevState,
+          ['categoria']: text
+        }))
+      }
 
-
-  }
+  
   const onChangeHandler2 = (text2) => {
     let matches2 = []
+    console.log(data3)
     if (text2.length > 0) {
       matches2 = data3.filter(dt3 => {
         const regex = new RegExp(`${text2}`, 'gi');
         return dt3.nombre.match(regex)
       })
+
+      
     }
     console.log('matches2', matches2)
     setSeuggestions2(matches2)
     setText2(text2)
+    
   }
   const onSuggestHandler2 = (text2) => {
 
-    setText2(text2);
+    setText2(text2.nombre);
     setSeuggestions2([]);
-
+     
+        setTipoProdSelectSelect(prevState => ({
+          ...prevState,
+          ['subCat']: text2
+        }))
+      
+    
 
   }
 
   const peticionGet = async () => {
-    await axios.get(url)
+    await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
       .then(response => {
         setData(response.data);
       })
   }
   const peticionGet2 = async () => {
-    await axios.get(url2)
+    await axios.get(url2, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
       .then(response => {
         setData2(response.data);
 
       })
   }
   const peticionGet3 = async () => {
-    await axios.get(url3)
+    await axios.get(url3, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
       .then(response => {
         setData3(response.data);
 
@@ -197,7 +228,7 @@ function TipoProdComp() {
       <br></br>
       {suggestions && suggestions.map((suggestions, i) =>
         <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandler(suggestions.nombre)}
+          onClick={() => onSuggestHandler(suggestions)}
         >{suggestions.nombre}</div>
       )}
 
@@ -207,7 +238,7 @@ function TipoProdComp() {
       <br></br>
       {suggestions2 && suggestions2.map((suggestions2, i) =>
         <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandler2(suggestions2.nombre)}
+          onClick={() => onSuggestHandler2(suggestions2)}
         >{suggestions2.nombre}</div>
       )}
 
@@ -291,8 +322,8 @@ function TipoProdComp() {
                   <td>{tipoProd.idTipoProd}</td>
                   <td>{tipoProd.codigoDeBarras}</td>
                   <td>{tipoProd.nombre}</td>
-                  <td>{tipoProd.categoria}</td>
-                  <td>{tipoProd.subCat}</td>
+                  <td>{tipoProd.categoria.nombre}</td>
+                  <td>{tipoProd.subCat.nombre}</td>
                   <td>{tipoProd.descripcion}</td>
                   <td>{tipoProd.precio}</td>
                   <td>{tipoProd.neto}</td>
