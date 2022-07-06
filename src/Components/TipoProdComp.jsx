@@ -3,12 +3,12 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, Button, TextField } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faBarcode } from '@fortawesome/free-solid-svg-icons';
 import { apiBaseUrl } from "../constants/constants";
 
 const url = apiBaseUrl + "/tipoProductos/";
 const url2 = apiBaseUrl + "/categoria/";
-const url3 = apiBaseUrl +  "/subCat/";
+const url3 = apiBaseUrl + "/subCat/";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -41,6 +41,8 @@ function TipoProdComp() {
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalImprimir, setModalImprimir] = useState(false);
+  const [cantidad, setCantidad] = useState(1);
   const [search, setSearch] = useState("")
   const [tipoProdSelect, setTipoProdSelectSelect] = useState({
 
@@ -71,26 +73,26 @@ function TipoProdComp() {
         return dt2.nombre.match(regex)
       })
 
-     
+
     }
     console.log('matches', matches)
     setSeuggestions(matches)
     setText(text)
-  
+
   }
 
   const onSuggestHandler = (text) => {
 
     setText(text.nombre);
     setSeuggestions([]);
-   
-        setTipoProdSelectSelect(prevState => ({
-          ...prevState,
-          ['categoria']: text
-        }))
-      }
 
-  
+    setTipoProdSelectSelect(prevState => ({
+      ...prevState,
+      ['categoria']: text
+    }))
+  }
+
+
   const onChangeHandler2 = (text2) => {
     let matches2 = []
     console.log(data3)
@@ -100,24 +102,24 @@ function TipoProdComp() {
         return dt3.nombre.match(regex)
       })
 
-      
+
     }
     console.log('matches2', matches2)
     setSeuggestions2(matches2)
     setText2(text2)
-    
+
   }
   const onSuggestHandler2 = (text2) => {
 
     setText2(text2.nombre);
     setSeuggestions2([]);
-     
-        setTipoProdSelectSelect(prevState => ({
-          ...prevState,
-          ['subCat']: text2
-        }))
-      
-    
+
+    setTipoProdSelectSelect(prevState => ({
+      ...prevState,
+      ['subCat']: text2
+    }))
+
+
 
   }
 
@@ -182,6 +184,10 @@ function TipoProdComp() {
       })
   }
 
+
+
+
+
   const peticionDelete = async () => {
     await axios.delete(url + tipoProdSelect.idTipoProd)
       .then(response => {
@@ -202,6 +208,10 @@ function TipoProdComp() {
     setModalEliminar(!modalEliminar);
   }
 
+  const abrirCerrarModalImprimir = () => {
+    setModalImprimir(!modalImprimir);
+  }
+
   const seleccionartipoProd = (tipoProd, caso) => {
     setTipoProdSelectSelect(tipoProd);
     (caso === 'Editar') ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
@@ -211,12 +221,35 @@ function TipoProdComp() {
     console.log(e.target.value)
   }
 
+  const onImprimir = (tipoProd) => {
+    setTipoProdSelectSelect(tipoProd);
+    abrirCerrarModalImprimir();
+
+  }
+
+
+  const imprimirEtiquetas = () => {
+
+
+    return axios.get(
+      apiBaseUrl + `/etiquetas/tipoProducto/${tipoProdSelect.idTipoProd}/?cantidad=${cantidad}`,
+      { responseType: 'blob' }
+    ).then((response) => {
+      window.open(URL.createObjectURL(response.data));
+    })
+
+  }
+
+  const cambiarCantidad = (event) => {
+    console.log(event.target.value)
+    setCantidad(event.target.value) }
+
   const results = !search ? data : data.filter((tipoProd) => tipoProd.nombre.toLowerCase().includes(search.toLocaleLowerCase()));
 
 
   const bodyInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo tipoProd</h3>
+      <h3>Agregar Nuevo Tipo de Producto</h3>
       <TextField name="codigoDeBarras" className={styles.inputMaterial} label="codigoDeBarras" onChange={handleChange} />
 
       <br></br>
@@ -259,7 +292,7 @@ function TipoProdComp() {
 
   const bodyEditar = (
     <div className={styles.modal}>
-      <h3>Editar cateedor</h3>
+      <h3>Editar Tipo Producto</h3>
       <TextField name="codigoDeBarras" className={styles.inputMaterial} label="codigoDeBarras" onChange={handleChange} value={tipoProdSelect && tipoProdSelect.codigoDeBarras} />
       <br></br>
       <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} />
@@ -273,7 +306,7 @@ function TipoProdComp() {
 
   const bodyEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el cat <b>{tipoProdSelect && tipoProdSelect.nombre}</b> ? </p>
+      <p>Estás seguro que deseas eliminar el tipo de producto<b>{tipoProdSelect && tipoProdSelect.nombre}</b> ? </p>
       <div align="right">
         <Button color="secondary" onClick={() => peticionDelete()} >Sí</Button>
         <Button onClick={() => abrirCerrarModalEliminar()}>No</Button>
@@ -284,6 +317,20 @@ function TipoProdComp() {
   )
 
 
+  const bodyImprimirEtiqueta = (
+    <div className={styles.modal}>
+      <h3>Imprimir Etiqueta</h3>
+      <TextField id='cantidadEtiquetas' type="number" name="cantidad" className={styles.inputMaterial} label="Cantidad de Etiquetas" onChange={ cambiarCantidad} />
+      <br /><br />
+      <div align="right">
+        <Button color="primary" onClick={() => imprimirEtiquetas()}>Imprimir</Button>
+        <Button onClick={() => abrirCerrarModalImprimir()}>Cancelar</Button>
+      </div>
+    </div>
+  )
+
+
+
   useEffect(() => {
     peticionGet();
     peticionGet2();
@@ -292,12 +339,12 @@ function TipoProdComp() {
   return (
     <div className="App">
       <div className="caja1">
-        <h2 className='titulo2'>Lista de tipoProds</h2>
+        <h2 className='titulo2'>Lista de Tipos de Producto</h2>
         <div className='buscador'>
           <input value={search} type="text" onChange={searcher} placeholder='buscar por nombre' className='form-control' />
         </div>
         <br />
-        <button className="btn btn-success" onClick={() => abrirCerrarModalInsertar()}>Agregar tipoProd</button>
+        <button className="btn btn-primary" onClick={() => abrirCerrarModalInsertar()}>Agregar Nuevo Tipo de Producto</button>
 
         <table className='table table-striped table-hover mt-5 shadow-lg'>
           <thead>
@@ -332,6 +379,9 @@ function TipoProdComp() {
                     <button className="btn btn-primary" onClick={() => seleccionartipoProd(tipoProd, 'Editar')}><FontAwesomeIcon icon={faEdit} /></button>
                     {"   "}
                     <button className="btn btn-danger" onClick={() => seleccionartipoProd(tipoProd, 'Eliminar')}><FontAwesomeIcon icon={faTrashAlt} /></button>
+                    {"   "}
+                    <button className="btn btn-danger" onClick={() => onImprimir(tipoProd)}><FontAwesomeIcon icon={faBarcode} /></button>
+
                   </td>
                 </tr>
               )
@@ -354,6 +404,11 @@ function TipoProdComp() {
           open={modalEliminar}
           onClose={abrirCerrarModalEliminar}>
           {bodyEliminar}
+        </Modal>
+        <Modal
+          open={modalImprimir}
+          onClose={abrirCerrarModalImprimir}>
+          {bodyImprimirEtiqueta}
         </Modal>
 
 
