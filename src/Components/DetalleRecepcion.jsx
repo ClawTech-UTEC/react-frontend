@@ -34,6 +34,10 @@ const DetalleRecepcion = () => {
         navigate("/recepciones");
         setOpenInformation(false);
     };
+
+    const onImprimirRecepcion = () =>
+        recepcionService.downloadRemitoPdf(recepcion.idRecepcion);
+
     return (
         <div className='background'>
             <Container fixed>
@@ -119,7 +123,7 @@ const DetalleRecepcion = () => {
 
                         </Grid>
                         <Grid item xs={4}>
-                            <Button variant="contained" color="primary" >Imprimir</Button>
+                            <Button variant="contained" color="primary" onClick={onImprimirRecepcion}>Imprimir</Button>
                         </Grid>
                         <Grid item xs={4}>
                             {recepcion.estadoRecepcion[recepcion.estadoRecepcion.length - 1].tipoEstado == "PENDIENTE" ? <Button variant="contained" color="primary" onClick={() => navigate('/controlarRecepcion', {

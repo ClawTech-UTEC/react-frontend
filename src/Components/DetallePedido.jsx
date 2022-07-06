@@ -65,6 +65,11 @@ const DetallePedido = () => {
         navigate("/devolverPedido"
             , { state: pedido });
     }
+    const onImprimirPedido = () => 
+        pedidosService.downloadRemitoPdf(pedido.idPedido);
+    
+
+
     return (
         <>
             <BackgroundGrid >
@@ -107,6 +112,7 @@ const DetallePedido = () => {
                             onDespacharPedido={() => onDespacharPedido()}
                             onEntregarPedido={() => onEntregarPedido()}
                             onDevolverPedido={() => onDevolverPedido()}
+                            onImprimirPedido={() => onImprimirPedido()}
                         />
                         <Grid item xs={3}>
                         </Grid>

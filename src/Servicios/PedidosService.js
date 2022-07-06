@@ -113,6 +113,15 @@ const pedidosService = {
         )
     },
 
+    downloadRemitoPdf: (idPedido) => {
+      return  axios.get(
+            apiBaseUrl + `/etiquetas/pedido/${idPedido}`,
+            { responseType: 'blob' } 
+        ).then((response) => {
+            window.open(URL.createObjectURL(response.data));
+        })
+    }
+
   
 
 

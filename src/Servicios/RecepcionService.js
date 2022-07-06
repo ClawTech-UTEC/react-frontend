@@ -102,6 +102,15 @@ const recepcionService = {
             },
         ).then(response => response);
     },
+
+    downloadRemitoPdf: (idRecepcion) => {
+        return axios.get(
+            apiBaseUrl + `/etiquetas/recepcion/${idRecepcion}`,
+            { responseType: 'blob' }
+        ).then((response) => {
+            window.open(URL.createObjectURL(response.data));
+        })
+    }
 }
 
 
