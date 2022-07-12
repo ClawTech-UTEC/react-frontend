@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faBarcode } from '@fortawesome/free-solid-svg-icons';
 import { apiBaseUrl } from "../constants/constants";
 
-const url = apiBaseUrl + "/tipoProductos/";
-const url2 = apiBaseUrl + "/categoria/";
-const url3 = apiBaseUrl + "/subCat/";
-
+const apiTipoProductos = apiBaseUrl + "/tipoProductos/";
+const apiCategoria = apiBaseUrl + "/categoria/";
+const apiSubCategoria = apiBaseUrl + "/subCat/";
+const apiProveedores = apiBaseUrl + "/prov";
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
@@ -31,13 +31,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 function TipoProdComp() {
   const styles = useStyles();
-  const [data, setData] = useState([])
-  const [data2, setData2] = useState([])
-  const [data3, setData3] = useState([])
-  const [text, setText] = useState('')
-  const [text2, setText2] = useState('')
-  const [suggestions, setSeuggestions] = useState([])
-  const [suggestions2, setSeuggestions2] = useState([])
+  const [tipoProducto, setTipoProducto] = useState([])
+  const [categorias, setCategorias] = useState([])
+  const [subCategorias, setSubCategorias] = useState([])
+  const [proveedores, setProveedores] = useState([]);
+  const [categoriaTxt, setCategoriaTxt] = useState('')
+  const [subCategoriaTxt, setSubCategoriaTxt] = useState('')
+  const [proveedorTxt, setproveedorTx] = useState('');
+  const [suggestionsCategoria, setSeuggestionsCategoria] = useState([])
+  const [suggestionsSubcategoria, setSeuggestionsSubcategoria] = useState([])
+  const [suggestionsProveedor, setSeuggestionsProveedor] = useState([])
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [modalInsertar, setModalInsertar] = useState(false);
@@ -65,10 +68,10 @@ function TipoProdComp() {
     console.log(tipoProdSelect);
   }
 
-  const onChangeHandler = (text) => {
+  const onChangeHandlerCategoria = (text) => {
     let matches = []
     if (text.length > 0) {
-      matches = data2.filter(dt2 => {
+      matches = categorias.filter(dt2 => {
         const regex = new RegExp(`${text}`, 'gi');
         return dt2.nombre.match(regex)
       })
@@ -76,15 +79,15 @@ function TipoProdComp() {
 
     }
     console.log('matches', matches)
-    setSeuggestions(matches)
-    setText(text)
+    setSeuggestionsCategoria(matches)
+    setCategoriaTxt(text)
 
   }
 
-  const onSuggestHandler = (text) => {
+  const onSuggestHandlerCategoria = (text) => {
 
-    setText(text.nombre);
-    setSeuggestions([]);
+    setCategoriaTxt(text.nombre);
+    setSeuggestionsCategoria([]);
 
     setTipoProdSelectSelect(prevState => ({
       ...prevState,
@@ -93,11 +96,11 @@ function TipoProdComp() {
   }
 
 
-  const onChangeHandler2 = (text2) => {
+  const onChangeHandlerSubCategoria = (text2) => {
     let matches2 = []
-    console.log(data3)
+    console.log(subCategorias)
     if (text2.length > 0) {
-      matches2 = data3.filter(dt3 => {
+      matches2 = subCategorias.filter(dt3 => {
         const regex = new RegExp(`${text2}`, 'gi');
         return dt3.nombre.match(regex)
       })
@@ -105,14 +108,14 @@ function TipoProdComp() {
 
     }
     console.log('matches2', matches2)
-    setSeuggestions2(matches2)
-    setText2(text2)
+    setSeuggestionsSubcategoria(matches2)
+    setSubCategoriaTxt(text2)
 
   }
-  const onSuggestHandler2 = (text2) => {
+  const onSuggestHandlerSubCategoria = (text2) => {
 
-    setText2(text2.nombre);
-    setSeuggestions2([]);
+    setSubCategoriaTxt(text2.nombre);
+    setSeuggestionsSubcategoria([]);
 
     setTipoProdSelectSelect(prevState => ({
       ...prevState,
@@ -123,49 +126,100 @@ function TipoProdComp() {
 
   }
 
-  const peticionGet = async () => {
-    await axios.get(url, {
+
+  const onChangeHandlerProveedor = (proveedorTxt) => {
+    console.log(proveedores)
+
+    let proveedoresSugeridos = []
+    if (proveedorTxt.length > 0) {
+      proveedoresSugeridos = proveedores.filter(proveedor => {
+        const regex = new RegExp(`${proveedorTxt}`, 'gi');
+        return proveedor.nombreProv.match(regex)
+      })
+
+
+    }
+    console.log('matches2', proveedorTxt)
+    setSeuggestionsProveedor(proveedoresSugeridos)
+    setproveedorTx(proveedorTxt)
+
+  }
+  const onSuggestHandlerProveedor = (provText) => {
+
+    setproveedorTx(provText.nombreProv);
+    setSeuggestionsProveedor([]);
+    setTipoProdSelectSelect(prevState => ({
+      ...prevState,
+      ['provedor']: provText
+    }))
+
+
+
+  }
+
+
+
+
+
+
+
+  const peticionGetTipoProuctos = async () => {
+    await axios.get(apiTipoProductos, {
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     })
       .then(response => {
-        setData(response.data);
+        setTipoProducto(response.data);
       })
   }
-  const peticionGet2 = async () => {
-    await axios.get(url2, {
+  const peticionGetCategorias = async () => {
+    await axios.get(apiCategoria, {
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     })
       .then(response => {
-        setData2(response.data);
+        setCategorias(response.data);
 
       })
   }
-  const peticionGet3 = async () => {
-    await axios.get(url3, {
+  const peticionGetSubCategoria = async () => {
+    await axios.get(apiSubCategoria, {
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     })
       .then(response => {
-        setData3(response.data);
+        setSubCategorias(response.data);
 
       })
   }
+  const peticionGetPrevedores = async () => {
+    await axios.get(apiProveedores, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => {
+        setProveedores(response.data);
+
+      })
+  }
+
+
+
   const peticionPost = async () => {
-    await axios.post(url, tipoProdSelect)
+    await axios.post(apiTipoProductos, tipoProdSelect)
       .then(response => {
-        setData(data.concat(response.data))
+        setTipoProducto(tipoProducto.concat(response.data))
         abrirCerrarModalInsertar()
       })
   }
   const peticionPut = async () => {
-    await axios.put(url + tipoProdSelect.idTipoProd, tipoProdSelect)
+    await axios.put(apiTipoProductos + tipoProdSelect.idTipoProd, tipoProdSelect)
       .then(response => {
-        var dataNueva = data;
+        var dataNueva = tipoProducto;
         dataNueva.map(tipoProd => {
           if (tipoProdSelect.idTipoProd === tipoProd.idTipoProd) {
             tipoProd.codigoDeBarras = tipoProdSelect.codigoDeBarras;
@@ -179,7 +233,7 @@ function TipoProdComp() {
 
           }
         })
-        setData(dataNueva);
+        setTipoProducto(dataNueva);
         abrirCerrarModalEditar();
       })
   }
@@ -189,9 +243,9 @@ function TipoProdComp() {
 
 
   const peticionDelete = async () => {
-    await axios.delete(url + tipoProdSelect.idTipoProd)
+    await axios.delete(apiTipoProductos + tipoProdSelect.idTipoProd)
       .then(response => {
-        setData(data.filter(tipoProd => tipoProd.idTipoProd !== tipoProdSelect.idTipoProd));
+        setTipoProducto(tipoProducto.filter(tipoProd => tipoProd.idTipoProd !== tipoProdSelect.idTipoProd));
         abrirCerrarModalEliminar();
       })
   }
@@ -244,36 +298,51 @@ function TipoProdComp() {
     console.log(event.target.value)
     setCantidad(event.target.value) }
 
-  const results = !search ? data : data.filter((tipoProd) => tipoProd.nombre.toLowerCase().includes(search.toLocaleLowerCase()));
+  const results = !search ? tipoProducto : tipoProducto.filter((tipoProd) => tipoProd.nombre.toLowerCase().includes(search.toLocaleLowerCase()));
 
 
   const bodyInsertar = (
     <div className={styles.modal}>
       <h3>Agregar Nuevo Tipo de Producto</h3>
-      <TextField name="codigoDeBarras" className={styles.inputMaterial} label="codigoDeBarras" onChange={handleChange} />
+      <TextField name="codigoDeBarras" className={styles.inputMaterial} label="Codigo de Barras" onChange={handleChange} />
 
       <br></br>
       <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} />
       <br></br>
 
-      <TextField className={styles.inputMaterial} label="categoria" onChange={e => onChangeHandler(e.target.value)} value={text}
+      <TextField className={styles.inputMaterial} label="Categoria" onChange={e => onChangeHandlerCategoria(e.target.value)} value={categoriaTxt}
       />
       <br></br>
-      {suggestions && suggestions.map((suggestions, i) =>
+      {suggestionsCategoria && suggestionsCategoria.map((suggestions, i) =>
         <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandler(suggestions)}
+          onClick={() => onSuggestHandlerCategoria(suggestions)}
         >{suggestions.nombre}</div>
       )}
 
 
-      <TextField className={styles.inputMaterial} label="subCat" onChange={e => onChangeHandler2(e.target.value)} value={text2}
+      <TextField className={styles.inputMaterial} label="Sub Categoria" onChange={e => onChangeHandlerSubCategoria(e.target.value)} value={subCategoriaTxt}
       />
+
       <br></br>
-      {suggestions2 && suggestions2.map((suggestions2, i) =>
+      {suggestionsSubcategoria && suggestionsSubcategoria.map((suggestions2, i) =>
         <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandler2(suggestions2)}
+          onClick={() => onSuggestHandlerSubCategoria(suggestions2)}
         >{suggestions2.nombre}</div>
       )}
+
+
+      <TextField className={styles.inputMaterial} label="Proveedor" onChange={e => onChangeHandlerProveedor(e.target.value)} value={proveedorTxt}
+      />
+      <br></br>
+      {suggestionsProveedor && suggestionsProveedor.map((suggestions3, i) =>
+        <div key={i} className="suggestion col-md-12 justify-content-md-center"
+          onClick={() => onSuggestHandlerProveedor(suggestions3)}
+        >{suggestions3.nombreProv}</div>
+      )}
+
+
+
+
 
       <TextField name="descripcion" className={styles.inputMaterial} label="Descripcion" onChange={handleChange} />
       <br></br>
@@ -332,9 +401,10 @@ function TipoProdComp() {
 
 
   useEffect(() => {
-    peticionGet();
-    peticionGet2();
-    peticionGet3();
+    peticionGetTipoProuctos();
+    peticionGetCategorias();
+    peticionGetSubCategoria();
+    peticionGetPrevedores();
   }, [])
   return (
     <div className="App">

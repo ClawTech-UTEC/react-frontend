@@ -48,7 +48,7 @@ export default function PedidosTable() {
 
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                        <h2 className='titulo2'>Recepciones</h2>
+                        <h2 className='titulo2'>Pedidos</h2>
 
                     <SearchBar className='searchbar'
                         value={searched} placeholder='Buscar'
