@@ -47,6 +47,7 @@ function TipoProdComp() {
   const [modalImprimir, setModalImprimir] = useState(false);
   const [cantidad, setCantidad] = useState(1);
   const [search, setSearch] = useState("")
+  const [foto, setfoto] = useState(null);
   const [tipoProdSelect, setTipoProdSelectSelect] = useState({
 
     codigoDeBarras: '',
@@ -56,6 +57,7 @@ function TipoProdComp() {
     descripcion: '',
     precio: '',
     neto: '',
+    imageUrl: '',
 
   })
 
@@ -158,7 +160,12 @@ function TipoProdComp() {
   }
 
 
+  const onChangeFileHandler = (e) => {
+    console.log(e)
 
+    console.log(e.target.files[0])
+    setfoto(e.target.files[0])
+  }
 
 
 
@@ -211,14 +218,41 @@ function TipoProdComp() {
 
   const peticionPost = async () => {
 
-console.log(tipoProdSelect)
+    console.log(tipoProdSelect)
+    const formData = new FormData();
+    formData.append("image", foto);
+    // formData.append("tipoProducto", tipoProdSelect);
+
+    console.log(tipoProdSelect);
+
+    let nombreUnicoImagen = tipoProdSelect.nombre + "_" + tipoProdSelect.provedor.nombreProv;
+    nombreUnicoImagen = nombreUnicoImagen.replace(/ /g, "_").toLowerCase();
+
+    await axios.post(apiTipoProductos + "image/" + nombreUnicoImagen,
+      formData
+    ).then(response => {
+      setTipoProdSelectSelect(prevState => ({
+        ...prevState,
+        ['imageUrl']: response.data
+      }),
 
 
-    await axios.post(apiTipoProductos, tipoProdSelect)
-      .then(response => {
-        setTipoProducto(tipoProducto.concat(response.data))
-        abrirCerrarModalInsertar()
-      })
+
+      );
+
+      axios.post(apiTipoProductos,
+        tipoProdSelect
+      )
+        .then(response => {
+          setTipoProducto(tipoProducto.concat(response.data))
+          abrirCerrarModalInsertar()
+        })
+
+    })
+
+
+
+
   }
   const peticionPut = async () => {
     await axios.put(apiTipoProductos + tipoProdSelect.idTipoProd, tipoProdSelect)
@@ -300,13 +334,14 @@ console.log(tipoProdSelect)
 
   const cambiarCantidad = (event) => {
     console.log(event.target.value)
-    setCantidad(event.target.value) }
+    setCantidad(event.target.value)
+  }
 
   const results = !search ? tipoProducto : tipoProducto.filter((tipoProd) => tipoProd.nombre.toLowerCase().includes(search.toLocaleLowerCase()));
 
 
   const bodyInsertar = (
-    <div className={styles.modal}>
+    <div className={styles.modal} align="center">
       <h3>Agregar Nuevo Tipo de Producto</h3>
       <TextField name="codigoDeBarras" className={styles.inputMaterial} label="Codigo de Barras" onChange={handleChange} />
 
@@ -364,21 +399,31 @@ console.log(tipoProdSelect)
       <InputLabel id="demo-simple-select-label">Metodo Picking</InputLabel>
       <FormControl fullWidth>
 
-      <Select
-        name="metodoPicking"
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        label="Metodo Picking"
-        onChange={handleChange}
-      >
-        <MenuItem value={"FIFO"}>FIFO</MenuItem>
-        <MenuItem value={"LIFO"}>LIFO</MenuItem>
-        <MenuItem value={"FEFO"}>FEFO</MenuItem>
-        <MenuItem value={"AL AZAR"}>AL AZAR</MenuItem>
-      </Select>
+        <Select
+          name="metodoPicking"
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="Metodo Picking"
+          onChange={handleChange}
+        >
+          <MenuItem value={"FIFO"}>FIFO</MenuItem>
+          <MenuItem value={"LIFO"}>LIFO</MenuItem>
+          <MenuItem value={"FEFO"}>FEFO</MenuItem>
+          <MenuItem value={"AL AZAR"}>AL AZAR</MenuItem>
+        </Select>
       </FormControl>
+      <Button color="primary"
 
-      <div align="right">
+        component="label"
+      >
+        Subir Foto
+        <input
+          type="file"
+          hidden
+          onChange={onChangeFileHandler}
+        />
+      </Button>
+      <div >
         <Button color="primary" onClick={() => peticionPost()}>Insertar</Button>
         <Button onClick={() => abrirCerrarModalInsertar()}>Cancelar</Button>
       </div>
@@ -415,7 +460,7 @@ console.log(tipoProdSelect)
   const bodyImprimirEtiqueta = (
     <div className={styles.modal}>
       <h3>Imprimir Etiqueta</h3>
-      <TextField id='cantidadEtiquetas' type="number" name="cantidad" className={styles.inputMaterial} label="Cantidad de Etiquetas" onChange={ cambiarCantidad} />
+      <TextField id='cantidadEtiquetas' type="number" name="cantidad" className={styles.inputMaterial} label="Cantidad de Etiquetas" onChange={cambiarCantidad} />
       <br /><br />
       <div align="right">
         <Button color="primary" onClick={() => imprimirEtiquetas()}>Imprimir</Button>
