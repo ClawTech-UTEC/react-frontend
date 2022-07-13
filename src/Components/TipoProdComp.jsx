@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, Button, TextField } from '@material-ui/core';
+import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, Button, TextField, Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faBarcode } from '@fortawesome/free-solid-svg-icons';
 import { apiBaseUrl } from "../constants/constants";
@@ -210,6 +210,10 @@ function TipoProdComp() {
 
 
   const peticionPost = async () => {
+
+console.log(tipoProdSelect)
+
+
     await axios.post(apiTipoProductos, tipoProdSelect)
       .then(response => {
         setTipoProducto(tipoProducto.concat(response.data))
@@ -347,11 +351,33 @@ function TipoProdComp() {
       <TextField name="descripcion" className={styles.inputMaterial} label="Descripcion" onChange={handleChange} />
       <br></br>
 
-      <TextField name="precio" className={styles.inputMaterial} label="Precio" onChange={handleChange} />
+      <TextField name="precio" className={styles.inputMaterial} label="Precio de Compra" onChange={handleChange} />
+      <br></br>
+
+      <TextField name="precioDeVenta" className={styles.inputMaterial} label="Precio De Venta" onChange={handleChange} />
       <br></br>
 
       <TextField name="neto" className={styles.inputMaterial} label="Neto" onChange={handleChange} />
       <br /><br />
+
+
+      <InputLabel id="demo-simple-select-label">Metodo Picking</InputLabel>
+      <FormControl fullWidth>
+
+      <Select
+        name="metodoPicking"
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        label="Metodo Picking"
+        onChange={handleChange}
+      >
+        <MenuItem value={"FIFO"}>FIFO</MenuItem>
+        <MenuItem value={"LIFO"}>LIFO</MenuItem>
+        <MenuItem value={"FEFO"}>FEFO</MenuItem>
+        <MenuItem value={"AL AZAR"}>AL AZAR</MenuItem>
+      </Select>
+      </FormControl>
+
       <div align="right">
         <Button color="primary" onClick={() => peticionPost()}>Insertar</Button>
         <Button onClick={() => abrirCerrarModalInsertar()}>Cancelar</Button>

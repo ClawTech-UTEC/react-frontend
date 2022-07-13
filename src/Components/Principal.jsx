@@ -102,13 +102,13 @@ function Principal() {
             <Grid container spacing={2}>
                 <Grid item xs={6}>
 
-                    <Card variant="outlined">
+                    <Card variant="outlined" >
                         <CardContent>
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Reporte Productos Vendidos 2022
                             </Typography>
-                            <ResponsiveContainer width={400} height={300}>
-                                <LineChart
+                            <ResponsiveContainer width={600} height={300}>
+                                <LineChart width={400} height={300}
                                     tickFormatter={dateFormatter}
                                     data={reporteAnualPedidos}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
@@ -132,8 +132,8 @@ function Principal() {
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Reporte Productos Solicitados 2022
                             </Typography>
-                            <ResponsiveContainer width={400} height={300}>
-                                <LineChart
+                            <ResponsiveContainer width={600} height={300}>
+                                <LineChart width={400} height={300}
                                     data={reporteAnualRecepcion}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                                 >
@@ -160,23 +160,37 @@ function Principal() {
                                 Productos Mas Vendidos 2022
                             </Typography>
 
-                            <table>
-                                <thead>
+                            <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
+                                <thead className="tableHead">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>NOMBRE</th>
-                                        <th>CANTIDAD VENDIDA</th>
-                                    </tr>
+                                        <th align="center">Id </th>
+                                        <th align="center">Nombre</th>
+                                        <th align="center">Cantidad Vendida</th>
 
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    {reporteProductosMasVendidos.map(item => TableRow(item))}
+
+                                    {reporteProductosMasVendidos.map((item) => (
+                                        <tr
+
+                                            key={item.idTipoProd}
+                                            sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}
+                                        >
+                                            <th>{item.idTipoProd}</th>
+
+                                            <th>{item.nombre}</th>
+                                            <th>{item.cantidad}</th>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
 
                         </CardContent>
 
                     </Card >
+
+                  
                 </Grid>
 
                 <Grid item xs={6}>
@@ -186,8 +200,8 @@ function Principal() {
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Proyeccion Facturacion Proximos 6 Meses
                             </Typography>
-                            <ResponsiveContainer width={400} height={300}>
-                                <LineChart
+                            <ResponsiveContainer width={600} height={300}>
+                                <LineChart width={400} height={300} 
                                     tickFormatter={dateFormatter}
                                     data={prediccion}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
