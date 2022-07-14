@@ -5,6 +5,8 @@ import { Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faBarcode } from '@fortawesome/free-solid-svg-icons';
 import { apiBaseUrl } from "../constants/constants";
+import { Col, Row } from 'reactstrap';
+//import { Storage } from '@google-cloud/storage';
 
 const apiTipoProductos = apiBaseUrl + "/tipoProductos/";
 const apiCategoria = apiBaseUrl + "/categoria/";
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
   },
   iconos: {
     cursor: 'pointer'
@@ -29,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%'
   }
 }));
+//const storage = new Storage();
+
 function TipoProdComp() {
   const styles = useStyles();
   const [tipoProducto, setTipoProducto] = useState([])
@@ -48,6 +52,9 @@ function TipoProdComp() {
   const [cantidad, setCantidad] = useState(1);
   const [search, setSearch] = useState("")
   const [foto, setfoto] = useState(null);
+  const [fotoPreview, setFotoPreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [tipoProdSelect, setTipoProdSelectSelect] = useState({
 
     codigoDeBarras: '',
@@ -63,6 +70,12 @@ function TipoProdComp() {
 
   const handleChange = e => {
     const { name, value } = e.target;
+
+
+
+
+
+
     setTipoProdSelectSelect(prevState => ({
       ...prevState,
       [name]: value
@@ -127,7 +140,7 @@ function TipoProdComp() {
 
 
   }
-
+  const fotoPlaceholder = "https://storage.googleapis.com/clawtechpics/tipoProducto/no-image.png"
 
   const onChangeHandlerProveedor = (proveedorTxt) => {
     console.log(proveedores)
@@ -162,6 +175,7 @@ function TipoProdComp() {
 
   const onChangeFileHandler = (e) => {
     console.log(e)
+    setFotoPreview(URL.createObjectURL(e.target.files[0]));
 
     console.log(e.target.files[0])
     setfoto(e.target.files[0])
@@ -218,6 +232,21 @@ function TipoProdComp() {
 
   const peticionPost = async () => {
 
+    if (tipoProdSelect.codigoDeBarras === "" || tipoProdSelect.nombre === "" || tipoProdSelect.categoria === "" || tipoProdSelect.subCat === "" || tipoProdSelect.descripcion === "" || tipoProdSelect.precio === "" || tipoProdSelect.neto === "" ) {
+      console.log(tipoProdSelect)
+     
+     
+     
+      setErrorMessage("Todos los campos son obligatorios")
+      return;
+    }
+
+
+
+
+
+
+
     console.log(tipoProdSelect)
     const formData = new FormData();
     formData.append("image", foto);
@@ -231,29 +260,24 @@ function TipoProdComp() {
     await axios.post(apiTipoProductos + "image/" + nombreUnicoImagen,
       formData
     ).then(response => {
-      setTipoProdSelectSelect(prevState => ({
-        ...prevState,
-        ['imageUrl']: response.data
-      }),
-
-
-
-      );
-
-      axios.post(apiTipoProductos,
-        tipoProdSelect
-      )
-        .then(response => {
-          setTipoProducto(tipoProducto.concat(response.data))
-          abrirCerrarModalInsertar()
-        })
-
+        axios.post(apiTipoProductos,
+          { ...tipoProdSelect, ['imageUrl']: response.data }
+        )
+          .then(response => {
+            setTipoProducto(tipoProducto.concat(response.data))
+            abrirCerrarModalInsertar()
+          })
+      
     })
 
 
 
 
+
   }
+
+
+
   const peticionPut = async () => {
     await axios.put(apiTipoProductos + tipoProdSelect.idTipoProd, tipoProdSelect)
       .then(response => {
@@ -289,6 +313,7 @@ function TipoProdComp() {
   }
 
   const abrirCerrarModalInsertar = () => {
+    setErrorMessage("");
     setModalInsertar(!modalInsertar);
   }
 
@@ -343,90 +368,104 @@ function TipoProdComp() {
   const bodyInsertar = (
     <div className={styles.modal} align="center">
       <h3>Agregar Nuevo Tipo de Producto</h3>
-      <TextField name="codigoDeBarras" className={styles.inputMaterial} label="Codigo de Barras" onChange={handleChange} />
 
-      <br></br>
-      <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} />
-      <br></br>
+      <Row>
+        <Col>
+          <TextField name="codigoDeBarras" className={styles.inputMaterial} label="Codigo de Barras" onChange={handleChange} type="number" />
 
-      <TextField className={styles.inputMaterial} label="Categoria" onChange={e => onChangeHandlerCategoria(e.target.value)} value={categoriaTxt}
-      />
-      <br></br>
-      {suggestionsCategoria && suggestionsCategoria.map((suggestions, i) =>
-        <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandlerCategoria(suggestions)}
-        >{suggestions.nombre}</div>
-      )}
+          <br></br>
+          <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} />
+          <br></br>
 
-
-      <TextField className={styles.inputMaterial} label="Sub Categoria" onChange={e => onChangeHandlerSubCategoria(e.target.value)} value={subCategoriaTxt}
-      />
-
-      <br></br>
-      {suggestionsSubcategoria && suggestionsSubcategoria.map((suggestions2, i) =>
-        <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandlerSubCategoria(suggestions2)}
-        >{suggestions2.nombre}</div>
-      )}
+          <TextField className={styles.inputMaterial} label="Categoria" onChange={e => onChangeHandlerCategoria(e.target.value)} value={categoriaTxt}
+          />
+          <br></br>
+          {suggestionsCategoria && suggestionsCategoria.map((suggestions, i) =>
+            <div key={i} className="suggestion col-md-12 justify-content-md-center"
+              onClick={() => onSuggestHandlerCategoria(suggestions)}
+            >{suggestions.nombre}</div>
+          )}
 
 
-      <TextField className={styles.inputMaterial} label="Proveedor" onChange={e => onChangeHandlerProveedor(e.target.value)} value={proveedorTxt}
-      />
-      <br></br>
-      {suggestionsProveedor && suggestionsProveedor.map((suggestions3, i) =>
-        <div key={i} className="suggestion col-md-12 justify-content-md-center"
-          onClick={() => onSuggestHandlerProveedor(suggestions3)}
-        >{suggestions3.nombreProv}</div>
-      )}
+          <TextField className={styles.inputMaterial} label="Sub Categoria" onChange={e => onChangeHandlerSubCategoria(e.target.value)} value={subCategoriaTxt}
+          />
+
+          <br></br>
+          {suggestionsSubcategoria && suggestionsSubcategoria.map((suggestions2, i) =>
+            <div key={i} className="suggestion col-md-12 justify-content-md-center"
+              onClick={() => onSuggestHandlerSubCategoria(suggestions2)}
+            >{suggestions2.nombre}</div>
+          )}
+
+
+          <TextField className={styles.inputMaterial} label="Proveedor" onChange={e => onChangeHandlerProveedor(e.target.value)} value={proveedorTxt}
+          />
+          <br></br>
+          {suggestionsProveedor && suggestionsProveedor.map((suggestions3, i) =>
+            <div key={i} className="suggestion col-md-12 justify-content-md-center"
+              onClick={() => onSuggestHandlerProveedor(suggestions3)}
+            >{suggestions3.nombreProv}</div>
+          )}
+
+        </Col>
+        <Col>
 
 
 
 
 
-      <TextField name="descripcion" className={styles.inputMaterial} label="Descripcion" onChange={handleChange} />
-      <br></br>
+          <TextField name="descripcion" className={styles.inputMaterial} label="Descripcion" onChange={handleChange} />
+          <br></br>
 
-      <TextField name="precio" className={styles.inputMaterial} label="Precio de Compra" onChange={handleChange} />
-      <br></br>
+          <TextField name="precio" className={styles.inputMaterial} label="Precio de Compra" onChange={handleChange} type="number"/>
+          <br></br>
 
-      <TextField name="precioDeVenta" className={styles.inputMaterial} label="Precio De Venta" onChange={handleChange} />
-      <br></br>
+          <TextField name="precioDeVenta" className={styles.inputMaterial} label="Precio De Venta" onChange={handleChange} type="number" />
+          <br></br>
 
-      <TextField name="neto" className={styles.inputMaterial} label="Neto" onChange={handleChange} />
-      <br /><br />
+          <TextField name="neto" className={styles.inputMaterial} label="Neto" onChange={handleChange} type="number" />
+          <br /><br />
 
 
-      <InputLabel id="demo-simple-select-label">Metodo Picking</InputLabel>
-      <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Metodo Picking</InputLabel>
+          <FormControl fullWidth>
 
-        <Select
-          name="metodoPicking"
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Metodo Picking"
-          onChange={handleChange}
-        >
-          <MenuItem value={"FIFO"}>FIFO</MenuItem>
-          <MenuItem value={"LIFO"}>LIFO</MenuItem>
-          <MenuItem value={"FEFO"}>FEFO</MenuItem>
-          <MenuItem value={"AL AZAR"}>AL AZAR</MenuItem>
-        </Select>
-      </FormControl>
-      <Button color="primary"
+            <Select
+              name="metodoPicking"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Metodo Picking"
+              onChange={handleChange}
+            >
+              <MenuItem value={"FIFO"}>FIFO</MenuItem>
+              <MenuItem value={"LIFO"}>LIFO</MenuItem>
+              <MenuItem value={"FEFO"}>FEFO</MenuItem>
+              <MenuItem value={"AL AZAR"}>AL AZAR</MenuItem>
+            </Select>
+          </FormControl>
 
-        component="label"
-      >
-        Subir Foto
-        <input
-          type="file"
-          hidden
-          onChange={onChangeFileHandler}
-        />
-      </Button>
+          <img
+            height={100}
+            src={
+              fotoPreview ?? fotoPlaceholder} alt="Foto del producto" />
+          <Button color="primary"
+
+            component="label"
+          >
+            Subir Foto
+            <input
+              type="file"
+              hidden
+              onChange={onChangeFileHandler}
+            />
+          </Button></Col>
+      </Row>
+
       <div >
         <Button color="primary" onClick={() => peticionPost()}>Insertar</Button>
         <Button onClick={() => abrirCerrarModalInsertar()}>Cancelar</Button>
       </div>
+      <div className='errorMessage'>{errorMessage}</div>
     </div>
   )
 
@@ -487,18 +526,22 @@ function TipoProdComp() {
         <br />
         <button className="btn btn-primary" onClick={() => abrirCerrarModalInsertar()}>Agregar Nuevo Tipo de Producto</button>
 
-        <table className='table table-striped table-hover mt-5 shadow-lg'>
+        <table className='table table-striped table-hover mt-5 shadow-lg tableProductos'>
           <thead>
             <tr className='bg-curso text-white' >
+              <th>Foto</th>
 
-              <th>idTipoProd</th>
-              <th>codigoDeBarras</th>
-              <th>nombre</th>
-              <th>categoria</th>
-              <th>subcategoria</th>
-              <th>descripcion</th>
-              <th>precio</th>
-              <th>neto</th>
+              <th>Id</th>
+              <th>Codigo De Barras</th>
+              <th>Nombre</th>
+              <th>Categoria</th>
+              <th>SubCategoria</th>
+              <th>Descripcion</th>
+              <th>Precio Compra</th>
+              <th>Precio Venta</th>
+
+              <th>Neto</th>
+              <th>Metodo Picking</th>
 
               <th>Acciones</th>
             </tr>
@@ -507,21 +550,33 @@ function TipoProdComp() {
             {results.map(tipoProd => {
               return (
                 <tr key={tipoProd.idTipoProd}>
-                  <td>{tipoProd.idTipoProd}</td>
-                  <td>{tipoProd.codigoDeBarras}</td>
-                  <td>{tipoProd.nombre}</td>
-                  <td>{tipoProd.categoria.nombre}</td>
-                  <td>{tipoProd.subCat.nombre}</td>
-                  <td>{tipoProd.descripcion}</td>
-                  <td>{tipoProd.precio}</td>
+                  <td>{
+                    <img
+                      height={100}
+                      src={
+                        tipoProd.imageUrl ?? tipoProd.imageUrl !== "" &
+                          tipoProd.imageUrl !== null &
+                          tipoProd.imageUrl !== undefined
+                          ? tipoProd.imageUrl :
+                          fotoPlaceholder} alt="Foto del producto" />}</td>
+                  <td >{tipoProd.idTipoProd ?? ""}</td>
+                  <td>{tipoProd.codigoDeBarras ?? ""}</td>
+                  <td>{tipoProd.nombre ?? ""}</td>
+                  <td>{tipoProd.categoria.nombre ?? ""}</td>
+                  <td>{tipoProd.subCat.nombre ?? ""}</td>
+                  <td>{tipoProd.descripcion ?? ""}</td>
+                  <td>{tipoProd.precio ?? 0}</td>
+                  <td>{tipoProd.precioDeVenta ?? 0}</td>
                   <td>{tipoProd.neto}</td>
 
+                  <td>{tipoProd.metodoPicking ?? "AL AZAR"}</td>
+
                   <td>
-                    <button className="btn btn-primary" onClick={() => seleccionartipoProd(tipoProd, 'Editar')}><FontAwesomeIcon icon={faEdit} /></button>
+                    <button className="btn btn-primary m-1" onClick={() => seleccionartipoProd(tipoProd, 'Editar')}><FontAwesomeIcon icon={faEdit} /></button>
                     {"   "}
-                    <button className="btn btn-danger" onClick={() => seleccionartipoProd(tipoProd, 'Eliminar')}><FontAwesomeIcon icon={faTrashAlt} /></button>
+                    <button className="btn btn-danger m-1" onClick={() => seleccionartipoProd(tipoProd, 'Eliminar')}><FontAwesomeIcon icon={faTrashAlt} /></button>
                     {"   "}
-                    <button className="btn btn-danger" onClick={() => onImprimir(tipoProd)}><FontAwesomeIcon icon={faBarcode} /></button>
+                    <button className="btn btn-danger m-1" onClick={() => onImprimir(tipoProd)}><FontAwesomeIcon icon={faBarcode} /></button>
 
                   </td>
                 </tr>
