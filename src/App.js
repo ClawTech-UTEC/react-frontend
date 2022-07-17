@@ -3,7 +3,7 @@ import './App.css';
 
 import HeaderComp from './Components/HeaderComp';
 import FooterComp from './Components/FooterComp';
-import { BrowserRouter, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 
 import Principal from './Components/Principal';
 
@@ -40,10 +40,10 @@ import { useEffect, useState } from 'react';
 function App() {
 
 
-  const { decodedToken, isExpired } = useJwt(localStorage.getItem('jwt'));
-
-  const [logged, setLogged] = useState(decodedToken!==null);
-console.log(logged);
+  let decodedToken = localStorage.getItem('jwt');
+  console.log(decodedToken);
+  const [logged, setLogged] = useState(decodedToken !== null);
+  console.log(logged);
 
   const theme = createTheme({
     palette: {
@@ -53,42 +53,57 @@ console.log(logged);
     }
   });
 
+  const ProtectedRoute = ({ auth, children }) => {
+    console.log(auth);
+    if (!auth) {
+      return <Navigate to="/" replace />;
+    }
 
+    return (<div>
+      <Outlet />
 
+    </div>);
+  };
+  console.log(decodedToken)
   return (
     <MuiThemeProvider theme={theme}>
 
       <BrowserRouter>
-        {decodedToken ? <NavBar setLogged={setLogged} /> : <div />}
+        {logged ? <NavBar setLogged={setLogged} /> : <div />}
         <Routes>
-          <Route path="/" element={decodedToken ? <Principal /> : <Login setLogged={setLogged} />}></Route>
-          <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
-          <Route path="/add-prov" element={<CreateProvComp />}></Route>
-          <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
-          <Route path="/recepciones" element={<RecepcionesTable />}></Route>
-          <Route path="/add-tipoProd" element={<TipoProdComp />}></Route>
-          <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
-          <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
-          <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
-          <Route path="/pedidos" element={<PedidosTable />}></Route>
-          <Route path="/crearPedido" element={<CrearPedido />}></Route>
-          <Route path="/detallePedido" element={<DetallePedido />}></Route>
-          <Route path="/prepararPedido" element={<PrepararPedido />}></Route>
-          <Route path="/controlarPedido" element={<ControlarPedido />}></Route>
-          <Route path="/despacharPedido" element={<DespacharPedido />}></Route>
-          <Route path="/entregarPedido" element={<EntregarPedido />}></Route>
-          <Route path="/devolverPedido" element={<DevolverPedido />}></Route>
-          <Route path="/stock" element={<StockTable />}></Route>
-          <Route path="/deposito" element={<Deposito />}></Route>
-
+          <Route path="/" element={logged ? <Principal /> : <Login setLogged={setLogged} />}></Route>
+          <Route element={<ProtectedRoute auth={logged} />}>
+            <Route path="/add-subcat" element={<CreateSubCatComp />}></Route>
+            <Route path="/add-prov" element={<CreateProvComp />}></Route>
+            <Route path="/add-cat" element={<CreateCategoriaComp />}></Route>
+            <Route path="/recepciones" element={<RecepcionesTable />}></Route>
+            <Route path="/add-tipoProd" element={<TipoProdComp />}></Route>
+            <Route path="/crearRecepcion" element={<CreateRecepcion />}></Route>
+            <Route path="/detalleRecepcion" element={<DetalleRecepcion />}></Route>
+            <Route path="/controlarRecepcion" element={<ControlarRecepcion />}></Route>
+            <Route path="/pedidos" element={<PedidosTable />}></Route>
+            <Route path="/crearPedido" element={<CrearPedido />}></Route>
+            <Route path="/detallePedido" element={<DetallePedido />}></Route>
+            <Route path="/prepararPedido" element={<PrepararPedido />}></Route>
+            <Route path="/controlarPedido" element={<ControlarPedido />}></Route>
+            <Route path="/despacharPedido" element={<DespacharPedido />}></Route>
+            <Route path="/entregarPedido" element={<EntregarPedido />}></Route>
+            <Route path="/devolverPedido" element={<DevolverPedido />}></Route>
+            <Route path="/stock" element={<StockTable />}></Route>
+            <Route path="/deposito" element={<Deposito />}></Route>
+          </Route>
         </Routes>
-
-
-
       </BrowserRouter>
     </MuiThemeProvider>
 
   );
 }
 
+
+
+
 export default App;
+
+
+
+

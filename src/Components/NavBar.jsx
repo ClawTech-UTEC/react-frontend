@@ -7,7 +7,7 @@ import './Navbar.css';
 import { IconContext } from 'react-icons';
 import { useJwt } from 'react-jwt';
 
-function Navbar() {
+function Navbar({ setLogged }) {
   const [sidebar, setSidebar] = useState(false);
   const navigate = useNavigate();
 
@@ -18,7 +18,8 @@ function Navbar() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('email');
     localStorage.removeItem('idUsuario');
-    navigate(0);
+    setLogged(false);
+    navigate("/");
   }
   return (
     <>

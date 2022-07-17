@@ -60,7 +60,6 @@ const Login = ({setLogged}) => {
                     localStorage.setItem('idUsuario', response.data.idUsuario);
                     setLogged(true)
                     navigate("/");
-
                 }
             }).catch(error => {
                 console.log(error);

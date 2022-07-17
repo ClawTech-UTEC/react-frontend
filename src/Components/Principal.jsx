@@ -1,8 +1,10 @@
-import { Box, Card, CardContent, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Typography } from '@material-ui/core';
+import { Box, Card, CardActions, CardContent, Grid, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TextField, Typography } from '@material-ui/core';
+import { Autocomplete } from '@mui/material';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { categoriaService } from '../Servicios/CategoriasService';
 
 import { pedidosService } from '../Servicios/PedidosService';
 import recepcionService from '../Servicios/RecepcionService';
@@ -12,7 +14,10 @@ function Principal() {
     const [reporteAnualPedidos, setReportePedidos] = useState(null);
     const [reporteAnualRecepcion, setReporteRecepcion] = useState(null);
     const [reporteProductosMasVendidos, setReporteProductosMasVendidos] = useState([]);
-
+    const [reporteCategorias, setReporteCategorias] = useState([]);
+    const [categoria, setcategoria] = useState([]);
+    const [categoriaSeleccionadaVendidos, setcategoriaSeleccionadaVendidos] = useState(null);
+    const [categoriaSeleccionadaCompras, setcategoriaSeleccionadaCompras] = useState(null);
     useEffect(() => {
         let ignore = false;
 
@@ -31,8 +36,12 @@ function Principal() {
             cargarReporteProductosMasVendidos(response.data);
         });
 
+        categoriaService.getReporteVentasCategorias(2022).then(response => {
+            cargarReporteCategorias(response.data);
+            console.log(response.data);
+        })
 
-
+        categoriaService.getCategorias().then(response => { cargarCategorias(response.data); })
 
         return () => { ignore = true; }
 
@@ -44,6 +53,7 @@ function Principal() {
     const dateFormatter = (item) => moment(`${item}-01-2022`).format("MMM YY");
 
     const cargarReportePedidos = (reporte) => {
+        console.log(reporte);
         setReportePedidos(reporte)
     }
     const cargarReporteRecepcion = (reporte) => {
@@ -53,7 +63,14 @@ function Principal() {
         setReporteProductosMasVendidos(reporte)
     }
 
+    const cargarReporteCategorias = (reporte) => {
+        setReporteCategorias(reporte)
+    }
 
+    const cargarCategorias = (reporte) => {
+        reporte.push({ id: 0, nombre: 'TOTALES' })
+        setcategoria(reporte);
+    }
 
     function TableRow(prop) {
         return (
@@ -94,21 +111,51 @@ function Principal() {
     ]
 
 
+    const onChangeCategoriaVentas = (event, value) => {
+        console.log(value);
 
+        if (value.nombre == "TOTALES") {
+            pedidosService.getReportePedidoAnual(2022).then(response => {
+
+                cargarReportePedidos(response.data);
+
+            });
+            return;
+        }
+        setcategoriaSeleccionadaVendidos(value);
+        categoriaService.getReporteVentasCategorias(value.idCat, 2022).then(response => { console.log(response.data); cargarReportePedidos(response.data); })
+    }
+
+    const onChangeCategoriaCompras = (event, value) => {
+        console.log(value);
+
+        if (value.nombre === "TOTALES") {
+            recepcionService.getReporteRecepcionesAnual(2022).then(response => {
+
+                cargarReporteRecepcion(response.data);
+
+            });
+            return;
+        }
+        setcategoriaSeleccionadaCompras(value);
+        categoriaService.getReporteComprasCategorias(value.idCat, 2022).then(response => { console.log(response.data); cargarReporteRecepcion(response.data); })
+    }
 
 
     return (
         <div className='background'>
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6} >
 
                     <Card variant="outlined" >
                         <CardContent>
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Reporte Productos Vendidos 2022
                             </Typography>
-                            <ResponsiveContainer width={600} height={300}>
-                                <LineChart width={400} height={300}
+
+
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart
                                     tickFormatter={dateFormatter}
                                     data={reporteAnualPedidos}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
@@ -118,22 +165,35 @@ function Principal() {
                                     <XAxis dataKey="mes" tickFormatter={dateFormatter} />
                                     <YAxis />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="cantidad" stroke="#ff7300" yAxisId={0} />
-                                </LineChart>
+                                    <Tooltip />
+                                    <Area
+                                        name="Cantidad de productos Vendidos Por Mes"
+                                        type="monotone" dataKey="cantidad" fill="#0d6efd" yAxisId={0} />
+                                </AreaChart>
                             </ResponsiveContainer>
+
+                            <Autocomplete
+                                options={categoria}
+                                onChange={onChangeCategoriaVentas}
+                                value={categoriaSeleccionadaVendidos}
+
+                                getOptionLabel={(option) => option.nombre || ""}
+                                renderInput={(params) => <TextField {...params} label="Buscar Por categoria" />}
+                            />
                         </CardContent>
 
                     </Card >
+
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
 
                     <Card variant="outlined">
                         <CardContent>
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Reporte Productos Solicitados 2022
                             </Typography>
-                            <ResponsiveContainer width={600} height={300}>
-                                <LineChart width={400} height={300}
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart
                                     data={reporteAnualRecepcion}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                                 >
@@ -143,16 +203,26 @@ function Principal() {
                                     <Legend displayName={"Cantidad Productos Solicitados Por mes"} />
 
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="cantidad" stroke="#ff7300" yAxisId={0} />
-                                </LineChart>
+                                    <Area name="Cantidad Productos Solicitados Por mes"
+                                        type="monotone"
+                                        dataKey="cantidad" fill="#0d6efd" yAxisId={0} />
+                                </AreaChart>
                             </ResponsiveContainer>
+
+                            <Autocomplete
+                                options={categoria}
+                                onChange={onChangeCategoriaCompras}
+                                value={categoriaSeleccionadaCompras}
+
+                                getOptionLabel={(option) => option.nombre || ""}
+                                renderInput={(params) => <TextField {...params} label="Buscar Por categoria" />}
+                            />
                         </CardContent>
 
                     </Card >
                 </Grid>
 
-
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
 
                     <Card variant="outlined">
                         <CardContent>
@@ -190,18 +260,18 @@ function Principal() {
 
                     </Card >
 
-                  
+
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
 
                     <Card variant="outlined">
                         <CardContent>
                             <Typography sx={{ fontSize: 14 }} gutterBottom>
                                 Proyeccion Facturacion Proximos 6 Meses
                             </Typography>
-                            <ResponsiveContainer width={600} height={300}>
-                                <LineChart width={400} height={300} 
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart
                                     tickFormatter={dateFormatter}
                                     data={prediccion}
                                     margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
@@ -211,8 +281,10 @@ function Principal() {
                                     <XAxis dataKey="mes" tickFormatter={dateFormatter} />
                                     <YAxis />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="facturacion" stroke="#ff7300" yAxisId={0} />
-                                </LineChart>
+                                    <Area
+                                        name = "Facturacion total Mensual"
+                                    type="monotone" dataKey="facturacion" fill="#0d6efd" yAxisId={0} />
+                                </AreaChart>
                             </ResponsiveContainer>
                         </CardContent>
 
