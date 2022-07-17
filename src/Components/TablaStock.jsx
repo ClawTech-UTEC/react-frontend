@@ -64,7 +64,7 @@ export default function Stocktable() {
 
                         <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
                                 <thead className="tableHead">
-                                    <tr>
+                                <tr className='bg-curso text-white' >
                                     <th align="center">Id Producto</th>
                                     <th align="center">Nombre Producto</th>
                                     <th align="center">Codigo de Barras</th>

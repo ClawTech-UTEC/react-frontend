@@ -80,7 +80,7 @@ export default function RecepcionesTable(props) {
 
                             <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
                             <thead className="tableHead">
-                                <tr>
+                                <tr className='bg-curso text-white' >
                                     <th align="center">Id Recepcion</th>
                                     <th align="center">Proveedor</th>
                                     <th align="center">Estado Recepcion</th>

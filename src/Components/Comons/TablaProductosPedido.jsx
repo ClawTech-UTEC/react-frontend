@@ -26,7 +26,7 @@ const TablaProductosPedido = ({ xs, md, productosAgregados, component }) => {
                                     <TableCell align="center">{producto.producto.nombre}</TableCell>
                                     <TableCell align="center">{producto.producto.provedor.nombreProv}</TableCell>
                                     <TableCell align="center">{producto.producto.codigoDeBarras}</TableCell>
-                                    <TableCell align="center">${producto.producto.precio}</TableCell>
+                                    <TableCell align="center">${producto.producto.precioDeVenta}</TableCell>
                                     <TableCell align="center">{producto.cantidad}</TableCell>
 
                                 </TableRow>
@@ -48,7 +48,7 @@ const TablaProductosPedido = ({ xs, md, productosAgregados, component }) => {
                             <TableRow
                                 sx={{ '&:last-child td, &:last-child th ': { border: 0 } }}>
                                 <TableCell align="center">{productosAgregados.reduce((total, pedidoProducto) => total + pedidoProducto.cantidad, 0)}</TableCell>
-                                <TableCell align="center">${productosAgregados.reduce((total, pedidoProducto) => total + (pedidoProducto.cantidad * pedidoProducto.producto.precio), 0)}</TableCell>
+                                <TableCell align="center">${productosAgregados.reduce((total, pedidoProducto) => total + (pedidoProducto.cantidad * pedidoProducto.producto.precioDeVenta), 0)}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

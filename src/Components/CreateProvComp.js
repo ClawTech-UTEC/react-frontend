@@ -168,19 +168,19 @@ function CreateProvComp(){
        <div className="caja1">
                 <h2 className='titulo2'>Lista de Proveedores</h2>
                 <div className='buscador'>
-                    <input value={search} type="text" onChange={searcher} placeholder='buscar por nombreProv' className='form-control' />
+                    <input value={search} type="text" onChange={searcher} placeholder='Buscar por nombre' className='form-control' />
                 </div>
                 <br />
-                <button className="btn btn-success" onClick={()=>abrirCerrarModalInsertar()}>Agregar Proveedor</button>
+                <button className="btn btn-primary" onClick={()=>abrirCerrarModalInsertar()}>Agregar Proveedor</button>
 
                 <table className='table table-striped table-hover mt-5 shadow-lg'>
                     <thead>
                         <tr className='bg-curso text-white' >
 
-                            <th>idProv</th>
-                            <th>nombreProv</th>
-                            <th>contacto</th>
-                            <th>e-mail</th>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Contacto</th>
+                            <th>Email</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>

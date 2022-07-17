@@ -156,19 +156,19 @@ function CreateCategoriaComp(){
     return(
       <div className="App">
      <div className="caja1">
-              <h2 className='titulo2'>Lista de cateedores</h2>
+              <h2 className='titulo2'>Lista de Categorias</h2>
               <div className='buscador'>
-                  <input value={search} type="text" onChange={searcher} placeholder='buscar por nombre' className='form-control' />
+                  <input value={search} type="text" onChange={searcher} placeholder='Buscar por nombre' className='form-control' />
               </div>
               <br />
-              <button className="btn btn-success" onClick={()=>abrirCerrarModalInsertar()}>Agregar cateedor</button>
+              <button className="btn btn-primary" onClick={()=>abrirCerrarModalInsertar()}>Agregar Categoria</button>
 
               <table className='table table-striped table-hover mt-5 shadow-lg'>
                   <thead>
                       <tr className='bg-curso text-white' >
 
-                          <th>idCat</th>
-                          <th>nombre</th>
+                          <th>Id</th>
+                          <th>Nombre</th>
                          
                           <th>Acciones</th>
                       </tr>

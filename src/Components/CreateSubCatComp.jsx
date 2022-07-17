@@ -156,19 +156,19 @@ function CreateSubCatComp(){
     return(
       <div className="App">
      <div className="caja1">
-              <h2 className='titulo2'>Lista de subCategorias</h2>
+              <h2 className='titulo2'>Lista de SubCategorias</h2>
               <div className='buscador'>
-                  <input value={search} type="text" onChange={searcher} placeholder='buscar por nombre' className='form-control' />
+                  <input value={search} type="text" onChange={searcher} placeholder='Buscar por nombre' className='form-control' />
               </div>
               <br />
-          <button className="btn btn-success" onClick={() => abrirCerrarModalInsertar()}>Agregar subCategorias</button>
+          <button className="btn btn-primary" onClick={() => abrirCerrarModalInsertar()}>Agregar SubCategorias</button>
 
               <table className='table table-striped table-hover mt-5 shadow-lg'>
                   <thead>
                       <tr className='bg-curso text-white' >
 
-                          <th>idsubCat</th>
-                          <th>nombre</th>
+                          <th>Id</th>
+                          <th>Nombre</th>
                          
                           <th>Acciones</th>
                       </tr>

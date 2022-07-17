@@ -66,7 +66,7 @@ export default function PedidosTable() {
 
                         <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
                             <thead className="tableHead">
-                                <tr>
+                                <tr className='bg-curso text-white' >
                                     <th align="center">Id Pedido</th>
                                     <th align="center">Cliente</th>
                                     <th align="center">Estado Pedido</th>

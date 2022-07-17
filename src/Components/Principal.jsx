@@ -232,7 +232,7 @@ function Principal() {
 
                             <table sx={{ minWidth: 650 }} className='table table-striped table-hover mt-5 shadow-lg'>
                                 <thead className="tableHead">
-                                    <tr>
+                                    <tr className='bg-curso text-white' >
                                         <th align="center">Id </th>
                                         <th align="center">Nombre</th>
                                         <th align="center">Cantidad Vendida</th>
