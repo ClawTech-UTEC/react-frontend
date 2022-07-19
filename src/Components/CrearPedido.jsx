@@ -220,7 +220,7 @@ const CrearPedido = () => {
         console.log("productosAgregados");
         console.log(productosAgregados);
         productosAgregados.forEach(producto => {
-            total += producto.cantidad * producto.producto.precio;
+            total += producto.cantidad * producto.producto.precioDeVenta;
         }
         )
         return total;
