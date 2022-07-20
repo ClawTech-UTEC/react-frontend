@@ -2,8 +2,8 @@ runtime: nodejs
 env: flex
 
 resources:
-  cpu: 2
-  memory_gb: 4
+  cpu: 4
+  memory_gb: 4.0
   disk_size_gb: 10
   volumes:
   - name: reactdisk1
