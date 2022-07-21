@@ -17,15 +17,15 @@ pipeline {
     stage('test') {
       steps {
         sh 'npm test'
-        emailext(subject: 'Jenkins Notificación IMPORTANTE', attachLog: true, body: 'Resultados de test:', to: 'guille4542@gmail.com')
+        emailext(subject: 'Jenkins Notificación IMPORTANTE', attachLog: true, body: 'Resultados de test:', to: 'guillermo.rodriguez@estudiantes.utec.edu.uy')
       }
     }
 
-    // stage('Espera Autorizacion') {
-    //   steps {
-    //     input '¿Autoriza realizar el despliegue a produccion?'
-    //   }
-    // }
+    stage('Espera Autorizacion') {
+      steps {
+        input '¿Autoriza realizar el despliegue a produccion?'
+      }
+    }
 
     stage('Deploy') {
       steps {
