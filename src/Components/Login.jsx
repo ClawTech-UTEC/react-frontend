@@ -4,13 +4,16 @@
 import { Avatar, Button, Box, Checkbox, Container, CssBaseline, FormControlLabel, Grid, Link, TextField, Typography, Paper } from '@material-ui/core';
 import React, { useState } from 'react';
 import logo from '../images/logo.png';
+import background from '../images/login1.jpg';
+
 import { usuarioService } from '../Servicios/UsuarioService';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Registrarse from './Registrarse';
 import { useNavigate } from 'react-router-dom';
+import { Card } from '@mui/material';
 
-const Login = ({setLogged}) => {
+const Login = ({ setLogged }) => {
 
 
     const [error, setError] = useState("");
@@ -78,12 +81,12 @@ const Login = ({setLogged}) => {
 
 
     return (
-        <div className='background'>
+        <div className='background '>
+            <img className="loginBackImage" src={background}/>
+            {mostrarRegistrarse ? <Registrarse volverLogin={() => setMostrarRegistrarse(false)} /> :
 
-            {mostrarRegistrarse ? <Registrarse volverLogin={() => setMostrarRegistrarse(false)}/> :
-
-                <Paper>
-                    <Container component="main" maxWidth="xs">
+                <Container  component="main" maxWidth="xs">
+                    <Card sx={{ p: 3 }} className="card">
                         <CssBaseline />
                         <Box
                             sx={{
@@ -95,8 +98,8 @@ const Login = ({setLogged}) => {
                             <div className='centeredDiv'>
                                 <img className='imageLogo' src={logo} alt="logo clawtech"></img>
                             </div >
-                            <h2  className='loginTitle'>
-                                Login 
+                            <h2 className='loginTitle'>
+                                Login
                             </h2>
                             <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -145,14 +148,16 @@ const Login = ({setLogged}) => {
                                         </Link>
                                     </Grid>
                                     <Grid item>
-                                        <Link href="#" variant="body2" onClick={()=>setMostrarRegistrarse(true)}>
+                                        <Link href="#" variant="body2" onClick={() => setMostrarRegistrarse(true)}>
                                             {"Registrarse"}
                                         </Link>
                                     </Grid>
                                 </Grid>
                             </Box>
                         </Box>
-                    </Container></Paper>}
+                        </Card>
+                </Container>
+            }
         </div>
     );
 }

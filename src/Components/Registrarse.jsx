@@ -7,6 +7,7 @@ import logo from '../images/logo.png';
 import { usuarioService } from '../Servicios/UsuarioService';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { Card } from '@mui/material';
 
 const Registrarse = (props) => {
     const [error, setError] = useState("");
@@ -65,9 +66,9 @@ const Registrarse = (props) => {
         },
     });
     return (
-        
-            <Paper>
-                <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs">
+            <Card sx={{ p: 3 }} className="card">
+                
                     <CssBaseline />
                     <Box
                         sx={{
@@ -165,7 +166,7 @@ const Registrarse = (props) => {
                             </Grid>
                         </Box>
                     </Box>
-                </Container></Paper>
+            </Card> </Container>
       
     );
 }
