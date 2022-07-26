@@ -266,6 +266,9 @@ function TipoProdComp() {
           .then(response => {
             setTipoProducto(tipoProducto.concat(response.data))
             abrirCerrarModalInsertar()
+          }).catch(error => {
+
+            alert("Error al insertar el tipo de producto")
           })
       
     })
@@ -518,15 +521,16 @@ function TipoProdComp() {
   }, [])
   return (
     <div className="App">
-      <div className="caja1">
+      <div className="m-5">
         <h2 className='titulo2'>Lista de Tipos de Producto</h2>
         <div className='buscador'>
           <input value={search} type="text" onChange={searcher} placeholder='buscar por nombre' className='form-control' />
         </div>
         <br />
         <button className="btn btn-primary" onClick={() => abrirCerrarModalInsertar()}>Agregar Nuevo Tipo de Producto</button>
+        <div class="table-responsive">
 
-        <table className='table table-striped table-hover mt-5 shadow-lg tableProductos'>
+        <table className='table table-striped table-hover mt-5 shadow-lg  tableProductos'>
           <thead>
             <tr className='bg-curso text-white' >
               <th>Foto</th>
@@ -584,6 +588,7 @@ function TipoProdComp() {
             })}
           </tbody>
         </table>
+        </div>
         <Modal
           open={modalInsertar}
           onClose={abrirCerrarModalInsertar}>

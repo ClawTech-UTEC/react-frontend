@@ -56,11 +56,27 @@ function CreateProvComp(){
           })
       }
       const peticionPost=async()=>{
+        if (provSeleccionado.nombreProv!=='' && provSeleccionado.contacto!=='' && provSeleccionado.email!==''){
+
+        
+
+
+
+
+
+
         await axios.post(url, provSeleccionado)
         .then(response=>{
           setData(data.concat(response.data))
           abrirCerrarModalInsertar()
+        }).catch(error => {
+
+          alert("Error al insertar proveedor")
         })
+
+        }else{
+          alert("Todos los datos son obligatorios")
+        }
       }
     
       const peticionPut=async()=>{

@@ -55,9 +55,9 @@ const usuarioService = {
         )
     },
 
-    getUsuario: () => {
-        return axios.post(
-            apiBaseUrl + "/usuarios", {
+    getUsuarios: () => {
+        return axios.get(
+            apiBaseUrl + "/usuario", {
             'Content-Type': 'multipart/form-data'
         }
         ).then(response => {

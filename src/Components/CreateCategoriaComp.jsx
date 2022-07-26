@@ -55,12 +55,21 @@ function CreateCategoriaComp(){
         })
     }
     const peticionPost=async()=>{
+      if (catSelect.nombre!==''){
+
+
+
       await axios.post(url, catSelect)
       .then(response=>{
         setData(data.concat(response.data))
         abrirCerrarModalInsertar()
+      }).catch(error => {
+
+        alert("Error al insertar categoria")
       })
-    }
+    }else{
+      alert("El nombre de la categoria no puede estar vacio")
+    }}
   
     const peticionPut=async()=>{
       await axios.put(url+catSelect.idCat, catSelect)
