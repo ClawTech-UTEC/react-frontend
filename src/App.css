@@ -198,3 +198,14 @@ th{
     vertical-align: middle
   
 }
+
+
+.foot{
+  bottom: 0%;
+  
+  height: 30px;
+  background-color: #e57373;
+  text-align: center;
+  color: white;
+   display: 'flex',
+}

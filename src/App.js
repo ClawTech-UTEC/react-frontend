@@ -34,6 +34,7 @@ import DevolverPedido from './Components/DevolverPedido';
 import Deposito from './Components/Deposito';
 import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
+import StickyFooter from './Components/Comons/Footer';
 
 
 
@@ -95,6 +96,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </MuiThemeProvider>
+    
 
   );
 }

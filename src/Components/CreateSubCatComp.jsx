@@ -160,7 +160,7 @@ function CreateSubCatComp() {
   }, [])
 
   return (
-    <div className="App">
+    <div className="App m-5">
       <div className="caja1">
         <h2 className='titulo2'>Lista de SubCategorias</h2>
         <div className='buscador'>

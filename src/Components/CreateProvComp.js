@@ -181,7 +181,9 @@ function CreateProvComp(){
       }, [])
     return(
         <div className="App">
-       <div className="caja1">
+        <div className="caja1 m-5">
+          
+
                 <h2 className='titulo2'>Lista de Proveedores</h2>
                 <div className='buscador'>
                     <input value={search} type="text" onChange={searcher} placeholder='Buscar por nombre' className='form-control' />

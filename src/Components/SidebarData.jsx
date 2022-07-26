@@ -37,12 +37,7 @@ export const SidebarData = [
     icon: <FaIcons.FaUserTie />,
     cName: 'nav-text'
   },
-  {
-    title: 'Productos',
-    path: '/products',
-    icon: <FaIcons.FaCartPlus />,
-    cName: 'nav-text'
-  },
+  
   {
     title: 'Categorias',
     path: '/add-cat',
@@ -56,7 +51,7 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'TipoProd',
+    title: 'Tipos de Producto',
     path: '/add-tipoProd',
     icon: <FaIcons.FaWarehouse />,
     cName: 'nav-text'
