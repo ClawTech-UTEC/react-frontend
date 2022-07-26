@@ -122,8 +122,8 @@ export default function EntregarPedido() {
 
                     </Grid>
                 </Grid>
-                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta preparar el pedido?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
-                <InformationDiolog open={openInformation} title="Pedido Preparado con Exito" onAccept={onVolver}></InformationDiolog>
+                <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta entregar el pedido?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
+                <InformationDiolog open={openInformation} title="Pedido entregado con Exito" onAccept={onVolver}></InformationDiolog>
 
             </BackgroundGrid></form>
     )
