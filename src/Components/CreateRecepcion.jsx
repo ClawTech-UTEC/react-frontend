@@ -167,7 +167,7 @@ export default function CreateRecepcion() {
                                     helperText={formik.touched.cantidad && formik.errors.cantidad}
                                 />
                                 <Button color="primary" align="center" type="submit">
-                                    Agregar Prodcuto
+                                    Agregar Producto
                                 </Button>
                                 <p align="center" >
                                     {errorAgregarProductos}
