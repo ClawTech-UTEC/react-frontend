@@ -121,7 +121,7 @@ function CreateCategoriaComp(){
   
     const bodyInsertar=(
       <div className={styles.modal}>
-        <h3>Agregar Nuevo cateedor</h3>
+        <h3>Agregar Nueva Categoria</h3>
         <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange}/>
        
         <br /><br />
@@ -147,7 +147,7 @@ function CreateCategoriaComp(){
   
     const bodyEliminar=(
       <div className={styles.modal}>
-        <p>Estás seguro que deseas eliminar el cat <b>{catSelect && catSelect.nombre}</b> ? </p>
+        <p>¿Estás seguro que deseas eliminar la categoria? <b>{catSelect && catSelect.nombre}</b> ? </p>
         <div align="right">
           <Button color="secondary" onClick={()=>peticionDelete()} >Sí</Button>
           <Button onClick={()=>abrirCerrarModalEliminar()}>No</Button>
@@ -175,10 +175,8 @@ function CreateCategoriaComp(){
               <table className='table table-striped table-hover mt-5 shadow-lg'>
                   <thead>
                       <tr className='bg-curso text-white' >
-
                           <th>Id</th>
                           <th>Nombre</th>
-                         
                           <th>Acciones</th>
                       </tr>
                   </thead>

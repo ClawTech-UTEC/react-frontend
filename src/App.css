@@ -96,6 +96,19 @@
   padding: 50px;
 }
 
+@media only screen and (max-width: 600px) {
+  .background{
+  background-color: #e57373;
+  min-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 25px;
+  
+}
+}
+
+
 .loginBackImage {
     position: absolute;
     left: 0;
