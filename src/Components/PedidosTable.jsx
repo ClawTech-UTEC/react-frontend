@@ -86,7 +86,12 @@ export default function PedidosTable() {
                                     >
                                         <th align="center">{pedido.idPedido}</th>
                                         <th align="center">{pedido.cliente.nombre}</th>
-                                        <th align="center">{pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}</th>
+                                        <th align="center">{pedido.estadoPedido.sort(function (a, b) {
+                                            if (a.idEstadoPedido > b.idEstadoPedido) return 1;
+                                          
+                                            if (a.idEstadoPedido < b.idEstadoPedido) return -1;
+                                            return 0;
+                                        })[pedido.estadoPedido.length - 1].tipoEstadoPedido}</th>
                                         <th align="center">{pedido.estadoPedido[0].usuario.nombre}</th>
                                         <th align="center">{moment(new Date(pedido.fechaPedido)).format('D/M/YY')}</th>
                                     </tr>

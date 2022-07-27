@@ -533,7 +533,7 @@ function TipoProdComp() {
         <table className='table table-striped table-hover mt-5 shadow-lg  tableProductos'>
           <thead>
             <tr className='bg-curso text-white' >
-              <th>Foto</th>
+              <th>Imagen</th>
 
               <th>Id</th>
               <th>Codigo De Barras</th>
