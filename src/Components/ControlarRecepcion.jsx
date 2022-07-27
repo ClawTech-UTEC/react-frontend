@@ -163,7 +163,7 @@ const ControlarRecepcion = () => {
                 </Grid>
             </form>
 
-            <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta crear la recepcion?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
+            <ConfirmationDiolog open={openConfirmation} title="Confirmar" descripcion="¿Acepta controlar la recepcion?" onNoAccept={() => setOpenConfirmation(false)} onAccept={() => onConfirm} ></ConfirmationDiolog>
             <InformationDiolog open={openInformation} title="Recepcion Controlada con Exito" onAccept={onVolver}></InformationDiolog>
 
         </BackgroundGrid>

@@ -105,7 +105,12 @@ const DetallePedido = () => {
                             <Divider variant="middle" />
                         </Grid>
                         <TablaProductosPedido component={Paper} xs={12} productosAgregados={pedido.productos} />
-                        <BotonesDetallePedido xs={12} estadoPedido={pedido.estadoPedido[pedido.estadoPedido.length - 1].tipoEstadoPedido}
+                        <BotonesDetallePedido xs={12} estadoPedido={pedido.estadoPedido.sort(function (a, b) {
+                            if (a.idEstadoPedido > b.idEstadoPedido) return 1;
+
+                            if (a.idEstadoPedido < b.idEstadoPedido) return -1;
+                            return 0;
+                        })[pedido.estadoPedido.length - 1].tipoEstadoPedido}
                             onCancelarPedido={() => setOpenCancelarConfirmation(true)}
                             onPrepararPedido={() => onPrepararPedido()}
                             onControlarPedido={() => onControlarPedido()}

@@ -543,7 +543,6 @@ function TipoProdComp() {
               <th>Descripcion</th>
               <th>Precio Compra</th>
               <th>Precio Venta</th>
-
               <th>Neto</th>
               <th>Metodo Picking</th>
 
