@@ -134,7 +134,7 @@ function CreateCategoriaComp(){
   
     const bodyEditar=(
       <div className={styles.modal}>
-        <h3>Editar cateedor</h3>
+        <h3>Editar Categoria</h3>
         <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} value={catSelect && catSelect.nombre}/>
       
         <br /><br />

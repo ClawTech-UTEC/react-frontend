@@ -118,7 +118,7 @@ function CreateSubCatComp() {
 
   const bodyInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo subCateedor</h3>
+      <h3>Agregar Nuevo SubCategoria</h3>
       <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} />
 
       <br /><br />
@@ -131,7 +131,7 @@ function CreateSubCatComp() {
 
   const bodyEditar = (
     <div className={styles.modal}>
-      <h3>Editar subCateedor</h3>
+      <h3>Editar SubCategoria</h3>
       <TextField name="nombre" className={styles.inputMaterial} label="Nombre" onChange={handleChange} value={subCatSelect && subCatSelect.nombre} />
 
       <br /><br />
@@ -144,7 +144,7 @@ function CreateSubCatComp() {
 
   const bodyEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el subCat <b>{subCatSelect && subCatSelect.nombre}</b> ? </p>
+      <p>Estás seguro que deseas eliminar la SubCategoria <b>{subCatSelect && subCatSelect.nombre}</b> ? </p>
       <div align="right">
         <Button color="secondary" onClick={() => peticionDelete()} >Sí</Button>
         <Button onClick={() => abrirCerrarModalEliminar()}>No</Button>
