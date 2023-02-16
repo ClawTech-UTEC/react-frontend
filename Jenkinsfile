@@ -5,7 +5,6 @@ pipeline {
       steps {
         sh 'npm i --legacy-peer-deps'
         sh 'npm run build --verbose'
-        googleStorageUpload(pattern: '/tmp/workspace/eact-frontend_feature_despliegue/build/', bucket: 'gs://clawtech-logistica-proyecto-jenkins-artifacts/react/$JOB_NAME/$BUILD_NUMBER', credentialsId: 'clawtech-logistica-proyecto')
       }
     }
 
