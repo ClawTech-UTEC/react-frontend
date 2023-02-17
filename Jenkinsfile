@@ -11,7 +11,7 @@ pipeline {
     stage('test') {
       steps {
         sh 'npm test'
-        emailext(subject: 'Jenkins Notificación IMPORTANTE', attachLog: true, body: 'Resultados de test:', to: 'guillermo.rodriguez@estudiantes.utec.edu.uy')
+        emailext(subject: 'Jenkins Notificación IMPORTANTE', attachLog: true, body: 'Resultados de test:', to: 'tomas.fernandez@estudiantes.utec.edu.uy')
       }
     }
 
