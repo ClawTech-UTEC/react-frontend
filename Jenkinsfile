@@ -18,6 +18,7 @@ pipeline {
     stage('Deploy') {
       steps {
         sh 'gcloud auth activate-service-account jenkins-gce@ilog-377823.iam.gserviceaccount.com --key-file=key.json --project=ilog-377823'
+        sh 'gcloud config set account jenkins-gce@ilog-377823.iam.gserviceaccount.com'
         sh 'gcloud app deploy'
       }
     }
